@@ -30,10 +30,10 @@ per item.
 
 | # | Task | Owner | Status | Blocked by | Done when |
 |---|---|---|---|---|---|
-| 1.1 | Draft species eligibility table | Agent draft | todo | — | `templates/species-legality-check.md` has ≥15 candidate rows, all researched, none marked VERIFIED by an agent |
-| 1.2 | Build US buyer list, both segments | Agent | todo | — | `templates/buyer-log.csv` has 40–60 rows with contact + current source populated |
-| 1.3 | Vet 3+ Gujarat exporters/breeders | Co-founder | todo | — | 3+ named suppliers in `supplier-quote-log.csv`, MPEDA status recorded, willing to engage |
-| 1.4 | Close the free items in the verification queue | Agent draft / Human confirm | todo | — | V2, V4, V9–V12 moved off `UNVERIFIED` in `verification-queue.md` |
+| 1.1 | Draft species eligibility table | Agent draft | in_progress | — | `templates/species-legality-check.md` has ≥15 candidate rows, all researched, none marked VERIFIED by an agent. **15 rows drafted 2026-08-28, 13 UNVERIFIED + 2 FLAGGED (injurious, excluded). Remaining: human/counsel sign-off (blocked on founder/counsel time, not agent work) and CITES/WLPA checks are still "likely" not confirmed per-species.** |
+| 1.2 | Build US buyer list, both segments | Agent | in_progress | — | `templates/buyer-log.csv` has 40–60 rows with contact + current source populated. **16 real named companies found 2026-08-28 (7 wholesaler, 6 retailer, 3 unresolved segment) via web search — all missing named contact/email/phone. Short of the 40–60 target; open web search surfaces a finite set of large/visible players. Next: trade directories (PIJAC, OFI member lists), LinkedIn sourcing for named contacts at the 16 found, and direct ask at any trade show.** |
+| 1.3 | Vet 3+ Gujarat exporters/breeders | Co-founder | todo | — | 3+ named suppliers in `supplier-quote-log.csv`, MPEDA status recorded, willing to engage. **Also ask each: how do you currently route shipments to the airport/port for export — see V14, Gujarat is not a recognized export hub in available data.** |
+| 1.4 | Close the free items in the verification queue | Agent draft / Human confirm | in_progress | — | V2, V4, V9–V12 moved off `UNVERIFIED`. **Done 2026-08-28: V1, V2, V3, V4, V5, V9 confirmed CHECKED-INDICATIVE. New findings V13 (injurious species) and V14 (Kolkata export concentration) added. Still open: V6 (Lacey Act — needs counsel), V7, V8, V10, V11, V12 (need supplier conversations, Phase 1.3/2).** |
 
 **🚦 Gate 1** — ≥10 plausibly sellable species **and** ≥40 named buyers
 **and** ≥3 willing suppliers. Any failure stops the venture here.
