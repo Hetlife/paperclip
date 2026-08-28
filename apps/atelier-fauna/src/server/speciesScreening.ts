@@ -30,14 +30,14 @@ export interface ScreeningResult {
   authority?: string;
 }
 
-interface ExclusionRule {
+export interface ExclusionRule {
   /** Matched case-insensitively against the raw buyer input. */
   patterns: RegExp[];
   reason: string;
   authority: string;
 }
 
-const HARD_EXCLUSIONS: ExclusionRule[] = [
+export const HARD_EXCLUSIONS: ExclusionRule[] = [
   {
     patterns: [/\bclarias\b/i, /\bclariidae\b/i, /walking\s+catfish/i],
     reason:

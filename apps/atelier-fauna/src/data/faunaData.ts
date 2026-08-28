@@ -1,4 +1,9 @@
-import type { BiomeConfig, BiomeId, Specimen } from "@/types/fauna";
+import type {
+  AvailabilityStatus,
+  BiomeConfig,
+  BiomeId,
+  Specimen,
+} from "@/types/fauna";
 
 export const BIOMES: Record<BiomeId, BiomeConfig> = {
   hydro: {
@@ -77,6 +82,8 @@ export const SPECIMENS: Specimen[] = [
     narrativeOverview:
       "The Altum commands space without friction. Observing its slow vertical drift trains the human nervous system to abandon hurry.",
     temperament: ["Contemplative", "Fluid", "Serene"],
+    behaviour:
+      "Slow vertical drift; fin undulation; independent pectoral flutter.",
     status: "available",
     // Researched 2026-08: US retail for P. altum runs ~$17–320 depending on
     // locale/size, typically $45–130. The original spec figure of $380 sat
@@ -115,6 +122,8 @@ export const SPECIMENS: Specimen[] = [
     narrativeOverview:
       "Its motion is constant but never chaotic — proof that energy and calm are not opposites.",
     temperament: ["Expressive", "Social", "Bright"],
+    behaviour:
+      "Perch sway; periodic alert head-turn; occasional wing settle.",
     status: "sanctuary_only",
     estimatedContributionUSD: 0,
     careSpecs: {
@@ -151,6 +160,8 @@ export const SPECIMENS: Specimen[] = [
     narrativeOverview:
       "Motionless for hours, it moves only when the wind stirs surrounding leaves. It teaches that not every moment requires a human reaction.",
     temperament: ["Hyper-Focused", "Delicate", "Solitary"],
+    behaviour:
+      "Near-total stillness; petal-mimic wind sway; one fast strike-fold.",
     status: "waitlist",
     // Researched 2026-08: US retail for H. coronatus nymphs runs ~$50–100.
     // The original spec figure of $420 was 4–8x market.
@@ -189,6 +200,8 @@ export const SPECIMENS: Specimen[] = [
     narrativeOverview:
       "A masterclass in quiet presence. It exists in equilibrium, breathing with slow deliberate intervals that soothe overstimulated environments.",
     temperament: ["Solitary", "Poised", "Observant"],
+    behaviour:
+      "Slow respiratory expansion of the coil; periodic tongue flick.",
     status: "available",
     // Researched 2026-08: captive-bred C. caninus retails ~$150–550 in the
     // US. The original spec figure of $1450 was roughly 3x market.
@@ -227,6 +240,8 @@ export const SPECIMENS: Specimen[] = [
     narrativeOverview:
       "Its color is not aggression — it is confidence, unhidden and unapologetic, against a canopy that asks everything to blend in.",
     temperament: ["Bright", "Grounded", "Alert"],
+    behaviour:
+      "Continuous throat pulse; whole-body settle; rare blink.",
     // IUCN Critically Endangered — area of occupancy under 10 km². CITES
     // Appendix II with an annual export quota in the low hundreds, and
     // export suspended since 2010 pending non-detriment findings.
@@ -266,3 +281,18 @@ export function getSpecimensByBiome(biomeId: BiomeId): Specimen[] {
 export function getSpecimenById(id: string): Specimen | undefined {
   return SPECIMENS.find((s) => s.id === id);
 }
+
+/**
+ * Display labels for availability. Lives here rather than in StatusBadge so
+ * the demo pages can be generated with the same wording — a specimen
+ * described as "waitlist" in the app and "available" in the demo someone
+ * actually opens is exactly the drift this file exists to prevent.
+ */
+export const STATUS_LABELS: Record<
+  AvailabilityStatus,
+  { label: string; live: boolean }
+> = {
+  available: { label: "Available for placement", live: true },
+  waitlist: { label: "In sanctuary lineage · waitlist", live: false },
+  sanctuary_only: { label: "Sanctuary only · not placeable", live: false },
+};

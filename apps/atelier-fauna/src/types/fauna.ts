@@ -56,6 +56,8 @@ export interface Specimen {
   shortDescription: string;
   narrativeOverview: string;
   temperament: string[];
+  /** The resting behaviour its ambient animation loop is built from. */
+  behaviour: string;
   status: AvailabilityStatus;
   estimatedContributionUSD: number;
   careSpecs: SpecimenCareSpecs;

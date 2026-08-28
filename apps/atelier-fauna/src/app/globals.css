@@ -39,3 +39,77 @@ body {
   background: rgba(18, 19, 22, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
+
+/* ==========================================================================
+   Specimen behavioural loops.
+
+   Geometry lives in src/data/specimenArt.ts; motion lives here. Both are
+   shared with the standalone demo pages by scripts/sync-demo.mjs, so a
+   change in either reaches every surface after `npm run sync`.
+
+   These are CSS keyframes rather than Framer Motion props deliberately:
+   they run continuously on every visible specimen, and the compositor
+   handles that far more cheaply than JS-driven animation.
+   ========================================================================== */
+svg g,
+svg path,
+svg circle {
+  transform-box: view-box;
+}
+
+/* Hydro — vertical drift, fin undulation, independent pectoral flutter */
+.hydro-body { animation: drift 11s ease-in-out infinite; transform-origin: 100px 120px; }
+.hydro-caudal { animation: caudal 3.6s ease-in-out infinite; transform-origin: 84px 120px; }
+.hydro-pect { animation: pect 2.1s ease-in-out infinite; transform-origin: 124px 126px; }
+.hydro-dorsal { animation: finsway 6s ease-in-out infinite; transform-origin: 106px 84px; }
+.hydro-anal { animation: finsway 6s ease-in-out infinite 0.3s; transform-origin: 106px 156px; }
+@keyframes drift { 0%, 100% { transform: translateY(0); } 30% { transform: translateY(-7px); } 68% { transform: translateY(5px); } }
+@keyframes caudal { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+@keyframes pect { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(14deg); } }
+@keyframes finsway { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-3.5deg); } }
+
+/* Aether — perch sway, periodic alert head-turn, occasional wing settle */
+.aeth-body { animation: sway 7s ease-in-out infinite; transform-origin: 100px 196px; }
+.aeth-head { animation: headturn 9s ease-in-out infinite; transform-origin: 100px 96px; }
+.aeth-wing { animation: wing 8s ease-in-out infinite; transform-origin: 92px 112px; }
+.aeth-tail { animation: tailsway 7s ease-in-out infinite; transform-origin: 100px 190px; }
+@keyframes sway { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(1.6deg); } 75% { transform: rotate(-1.6deg); } }
+@keyframes tailsway { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(3.5deg); } 75% { transform: rotate(-3.5deg); } }
+@keyframes headturn { 0%, 14% { transform: rotate(0); } 24%, 38% { transform: rotate(14deg); } 47%, 61% { transform: rotate(0); } 71%, 85% { transform: rotate(-11deg); } 100% { transform: rotate(0); } }
+@keyframes wing { 0%, 55% { transform: rotate(0); } 65% { transform: rotate(-20deg); } 75%, 100% { transform: rotate(0); } }
+
+/* Micro — petal-mimic sway, tracking head, one fast strike-fold */
+.micro-all { animation: petalsway 12s ease-in-out infinite; transform-origin: 100px 200px; }
+.micro-head { animation: track 12s ease-in-out infinite; transform-origin: 100px 122px; }
+.micro-armL { animation: strikeL 12s ease-out infinite; transform-origin: 94px 128px; }
+.micro-armR { animation: strikeR 12s ease-out infinite; transform-origin: 109px 128px; }
+@keyframes petalsway { 0% { transform: rotate(0); } 8% { transform: rotate(2.4deg); } 14% { transform: rotate(-1.4deg); } 20% { transform: rotate(2deg); } 28%, 100% { transform: rotate(0); } }
+@keyframes track { 0%, 40% { transform: rotate(0); } 50%, 66% { transform: rotate(16deg); } 76%, 100% { transform: rotate(0); } }
+@keyframes strikeL { 0%, 55% { transform: rotate(0); } 58.5% { transform: rotate(-26deg); } 63%, 100% { transform: rotate(0); } }
+@keyframes strikeR { 0%, 55% { transform: rotate(0); } 58.5% { transform: rotate(26deg); } 63%, 100% { transform: rotate(0); } }
+
+/* Terra — respiratory expansion of the coil, periodic tongue flick */
+.terra-coil { animation: respire 8.5s ease-in-out infinite; transform-origin: 100px 155px; }
+.terra-head { animation: headrest 13s ease-in-out infinite; transform-origin: 96px 152px; }
+.terra-tongue { animation: flick 13s linear infinite; }
+@keyframes respire { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+@keyframes headrest { 0%, 42% { transform: rotate(0); } 50% { transform: rotate(2.5deg); } 58%, 100% { transform: rotate(0); } }
+@keyframes flick { 0%, 44% { opacity: 0; } 46.5% { opacity: 1; } 49%, 52% { opacity: 0; } 54.5% { opacity: 1; } 57%, 100% { opacity: 0; } }
+
+/* Sylvan — continuous throat pulse, whole-body settle, rare blink */
+.syl-body { animation: settle 6s ease-in-out infinite; transform-origin: 100px 186px; }
+.syl-throat { animation: throat 1.5s ease-in-out infinite; transform-origin: 100px 168px; }
+.syl-eyes { animation: blink 9s ease-in-out infinite; transform-origin: 100px 136px; }
+@keyframes settle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.5px) scaleY(1.012); } }
+@keyframes throat { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.55) translateY(2px); } }
+@keyframes blink { 0%, 72% { transform: scaleY(1); } 75% { transform: scaleY(0.08); } 78%, 100% { transform: scaleY(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

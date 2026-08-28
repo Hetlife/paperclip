@@ -271,96 +271,15 @@
 <div id="drawer"></div>
 
 <script>
-/* ---------------- data ---------------- */
-const BIOMES = {
-  hydro:{name:"Hydro",latin:"Regnum Aquaticum",tag:"Abyssal Equilibrium & Fluid Motion",wash:"75,139,166"},
-  aether:{name:"Aether",latin:"Regnum Avium",tag:"Weightless Resonances & Sky Lineages",wash:"116,132,154"},
-  micro:{name:"Micro",latin:"Regnum Insectorum",tag:"Sculptural Stillness & Metamorphosis",wash:"169,141,87"},
-  terra:{name:"Terra",latin:"Regnum Reptilia",tag:"Ancient Grounding & Thermal Poise",wash:"176,113,75"},
-  sylvan:{name:"Sylvan",latin:"Regnum Silvestre",tag:"Canopy Density & Primeval Flora",wash:"85,131,100"},
-};
+/* GENERATED:DATA — do not edit by hand. Run `npm run sync`. */
+/* Generated from src/data/faunaData.ts, src/data/journalArticles.ts,
+ * src/data/specimenArt.ts and src/server/speciesScreening.ts.
+ * Regenerate with: npm run sync */
+const BIOMES = {"hydro":{"name":"Hydro","latin":"Regnum Aquaticum","tag":"Abyssal Equilibrium & Fluid Motion","wash":"75,139,166"},"aether":{"name":"Aether","latin":"Regnum Avium","tag":"Weightless Resonances & Sky Lineages","wash":"130,147,166"},"micro":{"name":"Micro","latin":"Regnum Insectorum","tag":"Sculptural Stillness & Metamorphosis","wash":"181,155,99"},"terra":{"name":"Terra","latin":"Regnum Reptilia","tag":"Ancient Grounding & Thermal Poise","wash":"184,122,84"},"sylvan":{"name":"Sylvan","latin":"Regnum Silvestre","tag":"Canopy Density & Primeval Flora","wash":"94,139,109"}};
+const STATUS = {"available":{"label":"Available for placement","live":true},"waitlist":{"label":"In sanctuary lineage · waitlist","live":false},"sanctuary_only":{"label":"Sanctuary only · not placeable","live":false}};
 const ORDER = ["hydro","aether","micro","terra","sylvan"];
-
-const STATUS = {
-  available:{label:"Available for placement",live:true},
-  waitlist:{label:"In sanctuary lineage · waitlist",live:false},
-  sanctuary_only:{label:"Sanctuary only · not placeable",live:false},
-};
-
-const SPECIMENS = [
-  { id:"hydro-altum", biome:"hydro", name:"Orinoco Altum Angelfish", latin:"Pterophyllum altum",
-    aura:"The Dignity of Buoyancy", status:"available", price:110,
-    short:"Towering lateral symmetry that drifts through zero-current waters.",
-    narrative:"The Altum commands space without friction. Observing its slow vertical drift trains the human nervous system to abandon hurry.",
-    temperament:["Contemplative","Fluid","Serene"], behaviour:"Slow vertical drift; fin undulation; independent pectoral flutter.",
-    specs:[["Custodianship","Mindful"],["Space","120 gal vertical biotope"],["Temperature","28–30 °C"],["Humidity","100% submerged"],["Light","Low diffused"],["Lifespan","10–12 years"]],
-    journal:"the-art-of-non-resistance" },
-  { id:"aether-lorikeet", biome:"aether", name:"Rainbow Lorikeet", latin:"Trichoglossus moluccanus",
-    aura:"Weightless Colour in Motion", status:"sanctuary_only", price:0,
-    short:"A spectrum given wings — never still, never frantic.",
-    narrative:"Its motion is constant but never chaotic — proof that energy and calm are not opposites.",
-    temperament:["Expressive","Social","Bright"], behaviour:"Perch sway; periodic alert head-turn; occasional wing settle.",
-    specs:[["Custodianship","Master custodian"],["Space","Walk-in aviary, 3 m span"],["Temperature","20–28 °C"],["Humidity","50–65%"],["Light","Natural diurnal"],["Lifespan","20–30 years"]],
-    journal:"constant-motion-without-chaos" },
-  { id:"micro-mantis", biome:"micro", name:"Pink Orchid Mantis", latin:"Hymenopus coronatus",
-    aura:"The Architecture of Disguise", status:"waitlist", price:85,
-    short:"Living flora mimicry that turns patience into supreme art.",
-    narrative:"Motionless for hours, it moves only when the wind stirs surrounding leaves. It teaches that not every moment requires a human reaction.",
-    temperament:["Hyper-Focused","Delicate","Solitary"], behaviour:"Near-total stillness; petal-mimic wind sway; one fast strike-fold.",
-    specs:[["Custodianship","Intermediate"],["Space","20×20×30 cm vivarium"],["Temperature","25–28 °C"],["Humidity","70–85%"],["Light","Low diffused"],["Lifespan","8–12 months"]],
-    journal:"the-four-second-pause" },
-  { id:"terra-boa", biome:"terra", name:"Amazon Emerald Tree Boa", latin:"Corallus caninus",
-    aura:"Coiled Thermal Balance", status:"available", price:495,
-    short:"Sculptural emerald coils draped across ancient mahogany branches.",
-    narrative:"A masterclass in quiet presence. It exists in equilibrium, breathing with slow deliberate intervals that soothe overstimulated environments.",
-    temperament:["Solitary","Poised","Observant"], behaviour:"Slow respiratory expansion of the coil; periodic tongue flick.",
-    specs:[["Custodianship","Master custodian"],["Space","90×60×120 cm arboreal"],["Temperature","26–31 °C gradient"],["Humidity","75–90%"],["Light","Natural diurnal"],["Lifespan","15–20 years"]],
-    journal:"thermal-centering" },
-  { id:"sylvan-mantella", biome:"sylvan", name:"Golden Mantella", latin:"Mantella aurantiaca",
-    aura:"A Small Fire in Green Shade", status:"sanctuary_only", price:0,
-    short:"An ember-bright amphibian moving through the density of the forest floor.",
-    narrative:"Its colour is not aggression — it is confidence, unhidden and unapologetic, against a canopy that asks everything to blend in.",
-    temperament:["Bright","Grounded","Alert"], behaviour:"Continuous throat pulse; whole-body settle; rare blink.",
-    specs:[["Custodianship","Not placeable"],["Status","IUCN Critically Endangered"],["Trade","CITES Appendix II"],["Export","Suspended since 2010"],["Space","45×45×60 cm paludarium"],["Lifespan","6–8 years"]],
-    note:"Overcollection for the pet trade is a named driver of this species' decline. Displayed for education only; it cannot be requested.",
-    journal:"visible-without-apology" },
-];
-
-const JOURNAL = [
-  { slug:"the-art-of-non-resistance", biome:"hydro", read:4,
-    title:"The Dignity of Buoyancy — What Deep Waters Teach About Anxiety",
-    dek:"Emotional decompression & nervous system regulation.",
-    insight:"When current meets mass, resistance creates drag. True grace yields to the flow.",
-    body:["In the vertical calm of the Orinoco tributary, the Altum does not battle current; it adjusts its internal air bladder by micro-fractions to find equilibrium.",
-          "Human anxiety is often the exhausting act of tensing against inevitable drift. By constructing living aquatic biotopes in domestic spaces, we introduce a steady visual cadence that measurably lowers arousal."] },
-  { slug:"constant-motion-without-chaos", biome:"aether", read:4,
-    title:"Constant Motion Without Chaos", dek:"Why sustained energy and calm aren't opposites.",
-    insight:"Sustained energy is not the enemy of calm — erratic energy is.",
-    body:["The lorikeet is rarely still, yet it is never frantic. Its motion has a rhythm — feeding, calling, wheeling through the canopy — that repeats rather than escalates.",
-          "Modern busyness is often mistaken for productivity because both look like motion. The distinction that matters is whether the motion has a rhythm you could sustain indefinitely, or whether it is accelerating toward a crash."] },
-  { slug:"the-four-second-pause", biome:"micro", read:5,
-    title:"The Four-Second Pause — The Geometry of Orchid Mantis Stillness",
-    dek:"Strategic patience and breaking reaction addiction.",
-    insight:"Patience is not inactive waiting; it is calibrated readiness without anxiety.",
-    body:["The modern digital cortex is trained to respond to stimuli in under 200 milliseconds. The Orchid Mantis, perched upon white petals, exists in extended stretches of unbroken contemplation.",
-          "It moves only when intentional movement guarantees success. Adopting the ‘Mantis Pause’ — four deliberate breaths before replying to any high-stakes inquiry — restores executive autonomy to the mind."] },
-  { slug:"thermal-centering", biome:"terra", read:6,
-    title:"Thermal Anchoring — Maintaining Core Equilibrium in Cold Environments",
-    dek:"Boundary setting and protecting emotional bandwidth.",
-    insight:"External noise cannot penetrate an internal system anchored in self-awareness.",
-    body:["Cold-blooded creatures do not generate internal warmth through chaotic metabolism; they position themselves deliberately beneath direct thermal rays. They do not allow their environment to dictate their inner energy.",
-          "In human relationships, thermal anchoring is the conscious decision to choose calm over absorbed drama — to find your own gradient rather than matching the temperature of whatever room you are in."] },
-  { slug:"visible-without-apology", biome:"sylvan", read:4,
-    title:"Visible Without Apology",
-    dek:"Confidence and camouflage are both valid strategies — but they are not the same one.",
-    insight:"Standing out is not the same as being unsafe. Choose deliberately.",
-    body:["Against a forest floor built for concealment, the Golden Mantella does the opposite of blend in. Its colour is a declared fact, not a mistake it is trying to correct.",
-          "Most of us default to camouflage because it feels safer, without checking whether it is actually the right strategy for the moment we are in. Sometimes the mantella's answer — be unmistakably visible — is the one that works."] },
-];
-
-/* Same reject-only screening rules as the server. Ported verbatim in intent:
-   there is no "approved" verdict and there never will be — this can say
-   "definitely prohibited", never "legal". */
+const SPECIMENS = [{"id":"hydro-altum","biome":"hydro","name":"Orinoco Altum Angelfish","latin":"Pterophyllum altum","aura":"The Dignity of Buoyancy","status":"available","price":110,"short":"Towering lateral symmetry that drifts through zero-current waters.","narrative":"The Altum commands space without friction. Observing its slow vertical drift trains the human nervous system to abandon hurry.","temperament":["Contemplative","Fluid","Serene"],"behaviour":"Slow vertical drift; fin undulation; independent pectoral flutter.","specs":[["Custodianship","Mindful"],["Space","120 Gallon Vertical Biotope"],["Temperature","28°C – 30°C"],["Humidity","100% (Submerged)"],["Light","Low Diffused"],["Lifespan","10–12 Years"]],"journal":"the-art-of-non-resistance"},{"id":"aether-lorikeet","biome":"aether","name":"Rainbow Lorikeet","latin":"Trichoglossus moluccanus","aura":"Weightless Color in Motion","status":"sanctuary_only","price":0,"short":"A spectrum given wings, never still, never frantic.","narrative":"Its motion is constant but never chaotic — proof that energy and calm are not opposites.","temperament":["Expressive","Social","Bright"],"behaviour":"Perch sway; periodic alert head-turn; occasional wing settle.","specs":[["Custodianship","Master Custodian"],["Space","Walk-in Aviary, min. 3m span"],["Temperature","20°C – 28°C"],["Humidity","50% – 65%"],["Light","Natural Diurnal"],["Lifespan","20–30 Years"]],"journal":"constant-motion-without-chaos"},{"id":"micro-mantis","biome":"micro","name":"Pink Orchid Mantis","latin":"Hymenopus coronatus","aura":"The Architecture of Disguise","status":"waitlist","price":85,"short":"Living flora mimicry that turns patience into supreme art.","narrative":"Motionless for hours, it moves only when the wind stirs surrounding leaves. It teaches that not every moment requires a human reaction.","temperament":["Hyper-Focused","Delicate","Solitary"],"behaviour":"Near-total stillness; petal-mimic wind sway; one fast strike-fold.","specs":[["Custodianship","Intermediate"],["Space","Minimalist 20x20x30cm Frosted Vivarium"],["Temperature","25°C – 28°C"],["Humidity","70% – 85%"],["Light","Low Diffused"],["Lifespan","8–12 Months"]],"journal":"the-four-second-pause"},{"id":"terra-boa","biome":"terra","name":"Amazon Emerald Tree Boa","latin":"Corallus caninus","aura":"Coiled Thermal Balance","status":"available","price":495,"short":"Sculptural emerald coils draped across ancient mahogany branches.","narrative":"A masterclass in quiet presence. It exists in equilibrium, breathing with slow deliberate intervals that soothe overstimulated environments.","temperament":["Solitary","Poised","Observant"],"behaviour":"Slow respiratory expansion of the coil; periodic tongue flick.","specs":[["Custodianship","Master Custodian"],["Space","Arboreal Glass Terrarium 90x60x120cm"],["Temperature","26°C – 31°C Gradient"],["Humidity","75% – 90%"],["Light","Natural Diurnal"],["Lifespan","15–20 Years"]],"journal":"thermal-centering"},{"id":"sylvan-mantella","biome":"sylvan","name":"Golden Mantella","latin":"Mantella aurantiaca","aura":"A Small Fire in Green Shade","status":"sanctuary_only","price":0,"short":"An ember-bright amphibian moving through the density of the forest floor.","narrative":"Its color is not aggression — it is confidence, unhidden and unapologetic, against a canopy that asks everything to blend in.","temperament":["Bright","Grounded","Alert"],"behaviour":"Continuous throat pulse; whole-body settle; rare blink.","specs":[["Custodianship","Intermediate"],["Space","Bioactive Paludarium 45x45x60cm"],["Temperature","22°C – 26°C"],["Humidity","80% – 100%"],["Light","Low Diffused"],["Lifespan","6–8 Years"]],"journal":"visible-without-apology"}];
+const JOURNAL = [{"slug":"the-art-of-non-resistance","biome":"hydro","read":4,"title":"The Dignity of Buoyancy — What Deep Waters Teach About Anxiety","dek":"Emotional decompression & nervous system regulation.","insight":"When current meets mass, resistance creates drag. True grace yields to the flow.","body":["In the vertical calm of the Orinoco tributary, the Altum does not battle current; it adjusts its internal air bladder by micro-fractions to find equilibrium.","Human anxiety is often the exhausting act of tensing against inevitable drift. By constructing living aquatic biotopes in domestic spaces, we introduce a steady, 60-beat-per-minute visual cadence that measurably lowers salivary cortisol."]},{"slug":"constant-motion-without-chaos","biome":"aether","read":4,"title":"Constant Motion Without Chaos","dek":"Why sustained energy and calm aren't opposites.","insight":"Sustained energy is not the enemy of calm — erratic energy is.","body":["The lorikeet is rarely still, yet it is never frantic. Its motion has a rhythm — feeding, calling, wheeling through the canopy — that repeats rather than escalates.","Modern busyness is often mistaken for productivity because both look like motion. The distinction that matters is whether the motion has a rhythm you could sustain indefinitely, or whether it's accelerating toward a crash."]},{"slug":"the-four-second-pause","biome":"micro","read":5,"title":"The Four-Second Pause — The Geometry of Orchid Mantis Stillness","dek":"Strategic patience and breaking reaction addiction.","insight":"Patience is not inactive waiting; it is calibrated readiness without anxiety.","body":["The modern digital cortex is trained to respond to stimuli in under 200 milliseconds. The Orchid Mantis, perched upon white petals, exists in extended stretches of unbroken contemplation.","It moves only when intentional movement guarantees success. Adopting the 'Mantis Pause' — four deliberate breaths before replying to any high-stakes inquiry — restores executive autonomy to the mind."]},{"slug":"thermal-centering","biome":"terra","read":6,"title":"Thermal Anchoring — Maintaining Core Equilibrium in Cold Environments","dek":"Boundary setting and protecting emotional bandwidth.","insight":"External noise cannot penetrate an internal system anchored in self-awareness.","body":["Cold-blooded creatures do not generate internal warmth through chaotic metabolism; they position themselves deliberately beneath direct thermal rays. They do not allow their environment to dictate their inner energy.","In human relationships, thermal anchoring is the conscious decision to choose calm over absorbed drama — to find your own gradient rather than matching the temperature of whatever room you're in."]},{"slug":"visible-without-apology","biome":"sylvan","read":4,"title":"Visible Without Apology","dek":"Confidence and camouflage are both valid strategies — but they are not the same one.","insight":"Standing out is not the same as being unsafe. Confidence and camouflage are both valid strategies — choose deliberately.","body":["Against a forest floor built for concealment, the Golden Mantella does the opposite of blend in. Its color is a declared fact, not a mistake it's trying to correct.","Most of us default to camouflage because it feels safer, without checking whether it's actually the right strategy for the moment we're in. Sometimes the mantella's answer — be unmistakably visible — is the one that actually works."]}];
 const EXCLUSIONS = [
   { re:[/\bclarias\b/i,/\bclariidae\b/i,/walking\s+catfish/i],
     reason:"The entire Clariidae family (walking catfish) is listed as US injurious wildlife. Live specimens and viable eggs are prohibited from import, with no permit pathway for the pet trade.",
@@ -369,18 +288,27 @@ const EXCLUSIONS = [
     reason:"Snakehead species (Channa and Parachanna, 34 listed species) are US injurious wildlife. Live specimens and viable eggs are prohibited from import.",
     authority:"USFWS — Lacey Act, 50 CFR Part 16" },
   { re:[/\bhippocampus\b/i,/\bseahorse/i,/\bpipefish/i,/\bsyngnathid/i],
-    reason:"Seahorses and pipefish are Schedule I protected under India's Wild Life (Protection) Act; capture and trade are banned. Also CITES-listed.",
+    reason:"Seahorses and pipefish are Schedule I protected under India's Wild Life (Protection) Act; capture and trade are banned. Also CITES-listed. Out of scope regardless of source.",
     authority:"India WLPA 1972 (Schedule I) · CITES Appendix II" },
   { re:[/\bmantella\b/i],
-    reason:"Mantella species are CITES Appendix II listed. Mantella aurantiaca is IUCN Critically Endangered with an area of occupancy under 10 km², an annual export quota in the low hundreds, and export suspended since 2010. Overcollection for the pet trade is a named driver of its decline.",
+    reason:"Mantella species are CITES Appendix II listed. Mantella aurantiaca in particular is IUCN Critically Endangered with an area of occupancy under 10 km², carries an annual export quota in the low hundreds, and has had export suspended since 2010 pending non-detriment findings. Overcollection for the pet trade is a named driver of its decline.",
     authority:"CITES Appendix II · IUCN Red List (Critically Endangered)" },
   { re:[/\bpoecilotheria\b/i],
-    reason:"All Poecilotheria species are CITES Appendix II listed, requiring permits for international trade.",
+    reason:"All Poecilotheria species are CITES Appendix II listed, requiring permits for international trade. Out of this collection's declared scope in any case.",
     authority:"CITES Appendix II (2019)" },
   { re:[/\bpython\b/i,/\bboa\s+constrictor\b/i,/\beunectes\b/i,/\banaconda\b/i],
-    reason:"Several large constrictor species are US injurious wildlife with prohibited interstate transport. This match is broad and may catch permitted species — flagged for human review rather than silently allowed.",
-    authority:"USFWS — Lacey Act, 50 CFR 16.15" },
+    reason:"Several large constrictor species are US injurious wildlife with prohibited interstate transport. This match is broad and may catch permitted species — it is flagged for human review rather than silently allowed.",
+    authority:"USFWS — Lacey Act, 50 CFR 16.15" }
 ];
+const ART = {
+  hydro: "<g class=\"hydro-body\"><path d=\"M96 84 C104 56 116 34 134 18 C130 42 122 66 116 88\" class=\"hydro-dorsal\"/><path d=\"M96 156 C104 184 116 206 134 222 C130 198 122 174 116 152\" class=\"hydro-anal\"/><path d=\"M150 120 C142 104 126 88 106 82 C92 92 84 106 84 120 C84 134 92 148 106 158 C126 152 142 136 150 120 Z\"/><path d=\"M112 158 C114 182 112 202 106 220\"/><path d=\"M84 120 C70 108 58 102 48 100 C54 112 54 128 48 140 C58 138 70 132 84 120 Z\" class=\"hydro-caudal\"/><path d=\"M124 126 C132 132 136 142 133 150\" class=\"hydro-pect\"/><path d=\"M150 120 C146 116 142 114 138 114\" opacity=\"0.6\"/><circle cx=\"136\" cy=\"112\" r=\"2.6\" fill=\"var(--accent)\" stroke=\"none\"/><path d=\"M124 92 C120 110 120 132 124 150\" opacity=\"0.32\"/><path d=\"M108 84 C104 106 104 136 108 158\" opacity=\"0.32\"/></g>",
+  aether: "<path d=\"M40 196 L160 196\" opacity=\"0.5\"/><g class=\"aeth-body\"><path d=\"M100 96 C122 96 134 122 132 150 C130 176 116 192 100 192 C84 192 70 176 68 150 C66 122 78 96 100 96 Z\"/><g class=\"aeth-head\"><circle cx=\"100\" cy=\"76\" r=\"21\"/><path d=\"M118 70 C128 72 132 78 128 84 C124 88 118 86 116 82\"/><circle cx=\"108\" cy=\"70\" r=\"2.4\" fill=\"var(--accent)\" stroke=\"none\"/></g><path d=\"M92 112 C74 122 66 146 72 168 C80 162 88 146 92 128\" class=\"aeth-wing\"/><path d=\"M100 190 C104 208 106 222 104 234\" class=\"aeth-tail\"/><path d=\"M94 192 L92 197 M106 192 L108 197\"/></g>",
+  micro: "<g class=\"micro-all\"><path d=\"M100 200 L100 232\" opacity=\"0.5\"/><path d=\"M100 200 C88 190 84 172 90 158 C96 146 108 146 113 158 C119 172 114 190 100 200 Z\"/><path d=\"M100 156 L100 122\"/><path d=\"M90 176 C74 178 64 170 66 158 C76 154 88 162 90 172\"/><path d=\"M113 176 C129 178 139 170 137 158 C127 154 115 162 113 172\"/><path d=\"M92 150 C78 148 70 138 74 128 C84 128 92 138 93 146\"/><path d=\"M111 150 C125 148 133 138 129 128 C119 128 111 138 110 146\"/><g class=\"micro-head\"><path d=\"M100 122 C93 122 89 116 91 110 C95 105 105 105 109 110 C111 116 107 122 100 122 Z\"/><circle cx=\"94\" cy=\"111\" r=\"1.9\" fill=\"var(--accent)\" stroke=\"none\"/><circle cx=\"106\" cy=\"111\" r=\"1.9\" fill=\"var(--accent)\" stroke=\"none\"/><path d=\"M95 105 C92 96 90 90 91 84 M105 105 C108 96 110 90 109 84\"/></g><path d=\"M94 128 C84 132 78 142 80 152\" class=\"micro-armL\"/><path d=\"M109 128 C119 132 125 142 123 152\" class=\"micro-armR\"/></g>",
+  terra: "<path d=\"M22 116 C74 106 128 106 180 116\" opacity=\"0.45\" stroke-width=\"2\"/><g class=\"terra-coil\"><path d=\"M70 112 C50 140 54 178 80 186 C106 194 120 168 106 146\" opacity=\"0.55\"/><path d=\"M100 110 C80 140 84 180 110 187 C136 194 149 166 134 144\" opacity=\"0.75\"/><path d=\"M130 112 C114 138 118 172 140 178\" opacity=\"0.55\"/><g class=\"terra-head\"><path d=\"M96 152 C110 144 128 145 138 154 C128 163 110 163 96 158 Z\"/><circle cx=\"127\" cy=\"151\" r=\"2.3\" fill=\"var(--accent)\" stroke=\"none\"/><path d=\"M138 155 L150 155 M150 155 L156 151 M150 155 L156 159\" class=\"terra-tongue\"/></g></g>",
+  sylvan: "<path d=\"M34 186 C70 180 130 180 166 186\" opacity=\"0.45\"/><g class=\"syl-body\"><path d=\"M100 122 C126 122 142 146 142 164 C142 178 128 186 100 186 C72 186 58 178 58 164 C58 146 74 122 100 122 Z\"/><path d=\"M84 168 C92 176 108 176 116 168\" class=\"syl-throat\"/><circle cx=\"82\" cy=\"136\" r=\"7\"/><circle cx=\"118\" cy=\"136\" r=\"7\"/><g class=\"syl-eyes\"><circle cx=\"82\" cy=\"136\" r=\"3\" fill=\"var(--accent)\" stroke=\"none\"/><circle cx=\"118\" cy=\"136\" r=\"3\" fill=\"var(--accent)\" stroke=\"none\"/></g><path d=\"M70 178 C64 184 60 190 62 194 M130 178 C136 184 140 190 138 194\"/><path d=\"M138 168 C150 170 156 180 152 190\"/></g>"
+};
+/* END GENERATED:DATA */
+
 function screen(input){
   const t = input.trim();
   for (const r of EXCLUSIONS) if (r.re.some(p=>p.test(t)))
@@ -389,60 +317,6 @@ function screen(input){
 }
 
 /* ---------------- specimen art ---------------- */
-const ART = {
-  hydro:`<g class="lim" stroke="var(--accent)"><g class="hydro-body">
-    <path class="hydro-dorsal" d="M96 84 C104 56 116 34 134 18 C130 42 122 66 116 88"/>
-    <path class="hydro-anal" d="M96 156 C104 184 116 206 134 222 C130 198 122 174 116 152"/>
-    <path d="M150 120 C142 104 126 88 106 82 C92 92 84 106 84 120 C84 134 92 148 106 158 C126 152 142 136 150 120 Z"/>
-    <path d="M112 158 C114 182 112 202 106 220"/>
-    <path class="hydro-caudal" d="M84 120 C70 108 58 102 48 100 C54 112 54 128 48 140 C58 138 70 132 84 120 Z"/>
-    <path class="hydro-pect" d="M124 126 C132 132 136 142 133 150"/>
-    <path d="M150 120 C146 116 142 114 138 114" opacity=".6"/>
-    <circle cx="136" cy="112" r="2.6" fill="var(--accent)" stroke="none"/>
-    <path d="M124 92 C120 110 120 132 124 150" opacity=".32"/>
-    <path d="M108 84 C104 106 104 136 108 158" opacity=".32"/></g></g>`,
-  aether:`<g class="lim" stroke="var(--accent)"><path d="M40 196 L160 196" opacity=".5"/><g class="aeth-body">
-    <path d="M100 96 C122 96 134 122 132 150 C130 176 116 192 100 192 C84 192 70 176 68 150 C66 122 78 96 100 96 Z"/>
-    <g class="aeth-head"><circle cx="100" cy="76" r="21"/>
-      <path d="M118 70 C128 72 132 78 128 84 C124 88 118 86 116 82"/>
-      <circle cx="108" cy="70" r="2.4" fill="var(--accent)" stroke="none"/></g>
-    <path class="aeth-wing" d="M92 112 C74 122 66 146 72 168 C80 162 88 146 92 128"/>
-    <path class="aeth-tail" d="M100 190 C104 208 106 222 104 234"/>
-    <path d="M94 192 L92 197 M106 192 L108 197"/></g></g>`,
-  micro:`<g class="lim micro-all" stroke="var(--accent)">
-    <path d="M100 200 L100 232" opacity=".5"/>
-    <path d="M100 200 C88 190 84 172 90 158 C96 146 108 146 113 158 C119 172 114 190 100 200 Z"/>
-    <path d="M100 156 L100 122"/>
-    <path d="M90 176 C74 178 64 170 66 158 C76 154 88 162 90 172"/>
-    <path d="M113 176 C129 178 139 170 137 158 C127 154 115 162 113 172"/>
-    <path d="M92 150 C78 148 70 138 74 128 C84 128 92 138 93 146"/>
-    <path d="M111 150 C125 148 133 138 129 128 C119 128 111 138 110 146"/>
-    <g class="micro-head"><path d="M100 122 C93 122 89 116 91 110 C95 105 105 105 109 110 C111 116 107 122 100 122 Z"/>
-      <circle cx="94" cy="111" r="1.9" fill="var(--accent)" stroke="none"/>
-      <circle cx="106" cy="111" r="1.9" fill="var(--accent)" stroke="none"/>
-      <path d="M95 105 C92 96 90 90 91 84 M105 105 C108 96 110 90 109 84"/></g>
-    <path class="micro-armL" d="M94 128 C84 132 78 142 80 152"/>
-    <path class="micro-armR" d="M109 128 C119 132 125 142 123 152"/></g>`,
-  terra:`<g class="lim" stroke="var(--accent)">
-    <path d="M22 116 C74 106 128 106 180 116" opacity=".45" stroke-width="2"/>
-    <g class="terra-coil">
-      <path d="M70 112 C50 140 54 178 80 186 C106 194 120 168 106 146" opacity=".55"/>
-      <path d="M100 110 C80 140 84 180 110 187 C136 194 149 166 134 144" opacity=".75"/>
-      <path d="M130 112 C114 138 118 172 140 178" opacity=".55"/>
-      <g class="terra-head"><path d="M96 152 C110 144 128 145 138 154 C128 163 110 163 96 158 Z"/>
-        <circle cx="127" cy="151" r="2.3" fill="var(--accent)" stroke="none"/>
-        <path class="terra-tongue" d="M138 155 L150 155 M150 155 L156 151 M150 155 L156 159"/></g></g></g>`,
-  sylvan:`<g class="lim" stroke="var(--accent)">
-    <path d="M34 186 C70 180 130 180 166 186" opacity=".45"/>
-    <g class="syl-body">
-      <path d="M100 122 C126 122 142 146 142 164 C142 178 128 186 100 186 C72 186 58 178 58 164 C58 146 74 122 100 122 Z"/>
-      <path class="syl-throat" d="M84 168 C92 176 108 176 116 168"/>
-      <circle cx="82" cy="136" r="7"/><circle cx="118" cy="136" r="7"/>
-      <g class="syl-eyes"><circle cx="82" cy="136" r="3" fill="var(--accent)" stroke="none"/>
-        <circle cx="118" cy="136" r="3" fill="var(--accent)" stroke="none"/></g>
-      <path d="M70 178 C64 184 60 190 62 194 M130 178 C136 184 140 190 138 194"/>
-      <path d="M138 168 C150 170 156 180 152 190"/></g></g>`,
-};
 const svgFor = b => `<svg viewBox="0 0 200 240" role="img" aria-label="${BIOMES[b].name} specimen">${ART[b]}</svg>`;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
