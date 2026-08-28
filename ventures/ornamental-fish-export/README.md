@@ -12,7 +12,7 @@ wherever legal, financial, or animal-welfare judgement is involved.
 | | |
 |---|---|
 | Shipments completed | 0 |
-| Buyers contacted | 0 (16 candidates identified, 0 contacted) |
+| Buyers contacted | 0 (20 candidates identified, 0 contacted) |
 | Suppliers vetted | 0 (needs co-founder — task 1.3) |
 | Species researched / verified | 15 drafted / 0 verified (agents cannot verify — needs human/counsel) |
 | Spent to date | ₹0 of ₹10k–30k |

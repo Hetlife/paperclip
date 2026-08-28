@@ -8,6 +8,7 @@ deliverables of Phases 1–3, not illustrations.
 | `buyer-log.csv` | Gate 2 (the kill test) | Phase 1.2, 2.2, 2.3 |
 | `supplier-quote-log.csv` | Gate 3 (pricing reality) | Phase 1.3, 3.1 |
 | `species-legality-check.md` | Gate 1 and Gate 4 | Phase 1.1, verified in 4.5 |
+| `discovery-call-script.md` | Gate 2 | Drafted ahead of schedule (task 2.1); do not use until Gate 1 passes |
 
 ## Field conventions
 

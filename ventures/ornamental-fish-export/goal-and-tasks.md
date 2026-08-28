@@ -31,7 +31,7 @@ per item.
 | # | Task | Owner | Status | Blocked by | Done when |
 |---|---|---|---|---|---|
 | 1.1 | Draft species eligibility table | Agent draft | in_progress | — | `templates/species-legality-check.md` has ≥15 candidate rows, all researched, none marked VERIFIED by an agent. **15 rows drafted 2026-08-28, 13 UNVERIFIED + 2 FLAGGED (injurious, excluded). Remaining: human/counsel sign-off (blocked on founder/counsel time, not agent work) and CITES/WLPA checks are still "likely" not confirmed per-species.** |
-| 1.2 | Build US buyer list, both segments | Agent | in_progress | — | `templates/buyer-log.csv` has 40–60 rows with contact + current source populated. **16 real named companies found 2026-08-28 (7 wholesaler, 6 retailer, 3 unresolved segment) via web search — all missing named contact/email/phone. Short of the 40–60 target; open web search surfaces a finite set of large/visible players. Next: trade directories (PIJAC, OFI member lists), LinkedIn sourcing for named contacts at the 16 found, and direct ask at any trade show.** |
+| 1.2 | Build US buyer list, both segments | Agent | in_progress | — | `templates/buyer-log.csv` has 40–60 rows with contact + current source populated. **20 real named companies found via web search as of 2026-08-28 (9 wholesaler, 6 retailer, 4 unresolved segment). Checked PIJAC/Pet Advocacy Network and OFI — neither has a public member directory, membership required. Diminishing returns from open search reached; further growth needs the founder's own contacts, a paid trade directory, or a trade show. Segrest Farms has one unconfirmed contact name from a data-aggregator site — must be verified before use.** |
 | 1.3 | Vet 3+ Gujarat exporters/breeders | Co-founder | todo | — | 3+ named suppliers in `supplier-quote-log.csv`, MPEDA status recorded, willing to engage. **Also ask each: how do you currently route shipments to the airport/port for export — see V14, Gujarat is not a recognized export hub in available data.** |
 | 1.4 | Close the free items in the verification queue | Agent draft / Human confirm | in_progress | — | V2, V4, V9–V12 moved off `UNVERIFIED`. **Done 2026-08-28: V1, V2, V3, V4, V5, V9 confirmed CHECKED-INDICATIVE. New findings V13 (injurious species) and V14 (Kolkata export concentration) added. Still open: V6 (Lacey Act — needs counsel), V7, V8, V10, V11, V12 (need supplier conversations, Phase 1.3/2).** |
 
@@ -44,7 +44,7 @@ per item.
 
 | # | Task | Owner | Status | Blocked by | Done when |
 |---|---|---|---|---|---|
-| 2.1 | Draft discovery call script | Agent draft | todo | 1.2 | Script covers: current source, switch triggers, order size, payment terms, DOA expectations |
+| 2.1 | Draft discovery call script | Agent draft | done | 1.2 | Script covers: current source, switch triggers, order size, payment terms, DOA expectations. **Drafted 2026-08-28 as `templates/discovery-call-script.md`, ahead of schedule since it costs nothing to prepare. Do not use for real calls until Gate 1 passes.** |
 | 2.2 | Hold 20+ discovery conversations | **Founder (human)** | todo | 2.1, Gate 1 | 20+ rows at `conversation_held` or beyond, split across both segments |
 | 2.3 | Log every conversation outcome | Agent | todo | 2.2 | Every contacted row has `interest_level` and `differentiator_cited` filled |
 | 2.4 | Mid-point synthesis at 10 calls | Agent | todo | 2.2 (10 calls) | Written summary: which segment responds, what differentiators are actually cited |
