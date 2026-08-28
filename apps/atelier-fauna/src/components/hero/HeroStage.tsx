@@ -81,6 +81,7 @@ export function HeroStage() {
             >
               <SpecimenMedia
                 src={featured.assets.heroImage}
+                model3dUrl={featured.assets.interactive3dModelUrl}
                 alt={featured.commonName}
                 biomeId={featured.biomeId}
                 priority

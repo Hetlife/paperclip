@@ -52,6 +52,7 @@ export function SpecimenDossierModal() {
             >
               <SpecimenMedia
                 src={specimen.assets.heroImage}
+                model3dUrl={specimen.assets.interactive3dModelUrl}
                 alt={specimen.commonName}
                 biomeId={specimen.biomeId}
               />

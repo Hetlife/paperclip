@@ -1,32 +1,56 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import dynamic from "next/dynamic";
+import { Component, useState, type ReactNode } from "react";
 import type { BiomeId } from "@/types/fauna";
 import { BIOMES } from "@/data/faunaData";
 import { cn } from "@/lib/cn";
 
+// three.js + fiber are heavy; only pull them into the bundle for specimens
+// that actually ship a 3D model. Every specimen today falls through to the
+// image/gradient path below.
+const Specimen3DViewer = dynamic(
+  () => import("./Specimen3DViewer").then((m) => m.Specimen3DViewer),
+  { ssr: false, loading: () => null },
+);
+
 /**
- * Renders a specimen's hero image, falling back to a themed gradient when
- * the asset hasn't been uploaded yet (the spec ships no real photography).
+ * Resolves a specimen's visual: a rigged 3D model if one exists
+ * (assets.interactive3dModelUrl), else a photo, else a themed gradient
+ * card. This is the one place that fallback chain lives — nothing else
+ * in the app should reach for <Image> or Specimen3DViewer directly.
  */
 export function SpecimenMedia({
   src,
+  model3dUrl,
   alt,
   biomeId,
   className,
   priority,
 }: {
   src: string;
+  model3dUrl?: string;
   alt: string;
   biomeId: BiomeId;
   className?: string;
   priority?: boolean;
 }) {
-  const [failed, setFailed] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+  const [modelFailed, setModelFailed] = useState(false);
   const biome = BIOMES[biomeId];
 
-  if (failed) {
+  if (model3dUrl && !modelFailed) {
+    return (
+      <div className={cn("relative overflow-hidden", className)}>
+        <ModelErrorBoundary onError={() => setModelFailed(true)}>
+          <Specimen3DViewer modelUrl={model3dUrl} />
+        </ModelErrorBoundary>
+      </div>
+    );
+  }
+
+  if (imageFailed || (!src && !model3dUrl)) {
     return (
       <div
         className={cn("relative overflow-hidden", className)}
@@ -54,7 +78,32 @@ export function SpecimenMedia({
       priority={priority}
       sizes="(max-width: 768px) 100vw, 50vw"
       className={cn("object-cover", className)}
-      onError={() => setFailed(true)}
+      onError={() => setImageFailed(true)}
     />
   );
+}
+
+/**
+ * A missing/broken .glb throws inside the r3f render tree, which a normal
+ * try/catch or onError can't catch — only a class-based error boundary can.
+ * Catches that and lets SpecimenMedia drop back to the image/gradient path.
+ */
+class ModelErrorBoundary extends Component<
+  { children: ReactNode; onError: () => void },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch() {
+    this.props.onError();
+  }
+
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
 }

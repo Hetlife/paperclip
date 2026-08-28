@@ -47,6 +47,11 @@ export function SpecimenCard({ specimen }: { specimen: Specimen }) {
         layoutId={`image-${specimen.id}`}
         className="relative aspect-[4/5] w-full overflow-hidden"
       >
+        {/* Grid cards intentionally stay on the flat image/gradient path —
+            one WebGL canvas per card (up to a dozen+ on screen at once)
+            is a real performance risk. Live 3D is reserved for the hero
+            (one specimen) and the dossier modal (opened on demand). See
+            ROADMAP.md "Where NOT to render live 3D" for the reasoning. */}
         <SpecimenMedia
           src={specimen.assets.heroImage}
           alt={specimen.commonName}

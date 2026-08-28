@@ -45,11 +45,16 @@ session:
   slot gracefully falls back to a themed gradient card via
   `SpecimenMedia.tsx` rather than a broken image — replace the paths
   with real photography when it exists, no code changes needed.
-- **No 3D/Spline models.** The spec mentions `@splinetool/react-spline`
-  or Three.js for interactive 3D — not implemented. The tilt-card
-  parallax (CSS 3D transform on the 2D image) covers the "feels alive
-  on hover" goal without that dependency; add a real 3D layer later if
-  the flat-card version isn't enough.
+- **No real 3D models yet, but the viewer is wired.**
+  `Specimen3DViewer.tsx` (react-three-fiber) loads a `.glb` and loops
+  its `"Idle"` animation clip; `SpecimenMedia.tsx` prefers it over the
+  flat photo automatically once `assets.interactive3dModelUrl` is set
+  on a specimen. No specimen sets it yet, so every current view uses
+  the photo/gradient path — the three.js bundle is dynamically
+  imported and doesn't load until a model URL exists (confirmed:
+  bundle size didn't move when this was added). See `ROADMAP.md` for
+  what a real photo-to-3D-to-behavior pipeline actually requires —
+  it's several hard, mostly-manual problems, not one feature.
 - **No ambient audio.** The mute/unmute toggle in the navbar is wired
   to Zustand state but there's no actual audio element yet — `BiomeConfig.ambientAudioUrl`
   is typed but unused.
