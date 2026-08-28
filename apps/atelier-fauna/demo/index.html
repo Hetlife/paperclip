@@ -1,0 +1,634 @@
+<title>Atelier Fauna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #FBFBFD;
+    --surface: #FFFFFF;
+    --surface-sunk: #F4F6F8;
+    --ink: #14161A;
+    --ink-soft: #4A5058;
+    --ink-mute: #757D88;
+    --hairline: rgba(15, 22, 32, 0.10);
+    --hairline-soft: rgba(15, 22, 32, 0.055);
+    --shadow: 0 1px 2px rgba(12, 20, 30, .04), 0 18px 44px -22px rgba(12, 20, 30, .22);
+
+    --hydro: #4B8BA6;
+    --aether: #74849A;
+    --micro: #A98D57;
+    --terra: #B0714B;
+    --sylvan: #558364;
+
+    --accent: var(--hydro);
+    --biome-wash: rgba(75, 139, 166, .10);
+
+    --ok: #2F7D57;
+    --stop: #B4453C;
+
+    --measure: 66ch;
+    --pad: clamp(1.15rem, 4vw, 2.5rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0A0B0D;
+      --surface: #131519;
+      --surface-sunk: #0F1114;
+      --ink: #EDEFF2;
+      --ink-soft: #B0B7C0;
+      --ink-mute: #7E8792;
+      --hairline: rgba(235, 240, 248, 0.13);
+      --hairline-soft: rgba(235, 240, 248, 0.07);
+      --shadow: 0 1px 2px rgba(0,0,0,.5), 0 22px 50px -24px rgba(0,0,0,.8);
+      --hydro: #6FAAC4;
+      --aether: #96A6BB;
+      --micro: #CBAC6B;
+      --terra: #D08F63;
+      --sylvan: #74A484;
+      --ok: #5FBE8B;
+      --stop: #E2776C;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0A0B0D;
+    --surface: #131519;
+    --surface-sunk: #0F1114;
+    --ink: #EDEFF2;
+    --ink-soft: #B0B7C0;
+    --ink-mute: #7E8792;
+    --hairline: rgba(235, 240, 248, 0.13);
+    --hairline-soft: rgba(235, 240, 248, 0.07);
+    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 22px 50px -24px rgba(0,0,0,.8);
+    --hydro: #6FAAC4;
+    --aether: #96A6BB;
+    --micro: #CBAC6B;
+    --terra: #D08F63;
+    --sylvan: #74A484;
+    --ok: #5FBE8B;
+    --stop: #E2776C;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .8s cubic-bezier(.16,1,.3,1);
+  }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 var(--pad); }
+  .narrow { max-width: 680px; }
+
+  h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 400; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2.6rem, 6.5vw, 4.6rem); line-height: 1.02; letter-spacing: -.022em; }
+  h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); line-height: 1.12; letter-spacing: -.018em; }
+  h3 { font-size: 1.16rem; line-height: 1.3; letter-spacing: -.01em; }
+  p { margin: 0; max-width: var(--measure); }
+
+  .eyebrow {
+    font-family: Inter, sans-serif;
+    font-size: .688rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .15em;
+    color: var(--accent);
+    transition: color .6s cubic-bezier(.16,1,.3,1);
+  }
+  .eyebrow.neutral { color: var(--ink-mute); }
+
+  .lede { font-size: clamp(1.06rem, 1.9vw, 1.24rem); color: var(--ink-soft); line-height: 1.6; }
+  .small { font-size: .875rem; color: var(--ink-soft); }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .78rem; letter-spacing: -.01em; }
+
+  section { padding-block: clamp(3.5rem, 9vw, 6.5rem); }
+  .stack { display: flex; flex-direction: column; }
+  .g8  { gap: .5rem; }  .g12 { gap: .75rem; } .g16 { gap: 1rem; }
+  .g24 { gap: 1.5rem; } .g32 { gap: 2rem; }  .g48 { gap: 3rem; }
+
+  .rule { height: 1px; background: var(--hairline-soft); border: 0; margin: 0; }
+
+  /* ---------- masthead ---------- */
+  .masthead {
+    border-bottom: 1px solid var(--hairline-soft);
+    padding-block: 1.1rem;
+    position: sticky; top: 0; z-index: 40;
+    background: color-mix(in srgb, var(--ground) 86%, transparent);
+    backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+  }
+  .masthead .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .wordmark { font-family: Fraunces, Georgia, serif; font-size: 1.06rem; letter-spacing: -.01em; }
+  .masthead .mono { color: var(--ink-mute); }
+
+  /* ---------- hero ---------- */
+  .hero {
+    display: grid; gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: 1fr;
+    align-items: center;
+  }
+  @media (min-width: 860px) { .hero { grid-template-columns: 1.08fr .92fr; } }
+
+  .vitrine {
+    position: relative; aspect-ratio: 4/5;
+    border-radius: 26px; overflow: hidden;
+    background:
+      radial-gradient(120% 120% at 30% 18%, var(--biome-wash), transparent 62%),
+      linear-gradient(158deg, color-mix(in srgb, var(--accent) 7%, var(--surface)), var(--surface-sunk));
+    border: 1px solid var(--hairline-soft);
+    box-shadow: var(--shadow);
+    transition: background .8s cubic-bezier(.16,1,.3,1);
+  }
+  .vitrine svg { position: absolute; inset: 0; width: 100%; height: 100%; padding: 8%; }
+  .vitrine .tag {
+    position: absolute; left: 1.1rem; bottom: 1rem;
+    font-size: .625rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--accent); opacity: .85;
+  }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: .5rem;
+    border: 1px solid var(--hairline); border-radius: 999px;
+    padding: .32rem .75rem; font-size: .78rem; color: var(--ink-soft);
+    background: var(--surface); width: fit-content;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+  .dot.breathe { animation: breathe 3s ease-in-out infinite; }
+  @keyframes breathe {
+    0%,100% { transform: scale(1); box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 40%, transparent); }
+    50% { transform: scale(1.18); box-shadow: 0 0 12px 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+  }
+
+  /* ---------- exhibit switcher ---------- */
+  .switcher {
+    display: flex; gap: .25rem; padding: .28rem;
+    border: 1px solid var(--hairline-soft); border-radius: 999px;
+    background: var(--surface); width: fit-content; flex-wrap: wrap;
+    box-shadow: var(--shadow);
+  }
+  .switcher button {
+    appearance: none; border: 0; cursor: pointer;
+    font: inherit; font-size: .84rem; font-weight: 500;
+    padding: .44rem 1rem; border-radius: 999px;
+    background: transparent; color: var(--ink-mute);
+    transition: color .3s, background-color .45s cubic-bezier(.16,1,.3,1);
+  }
+  .switcher button:hover { color: var(--ink); }
+  .switcher button[aria-selected="true"] {
+    background: color-mix(in srgb, var(--accent) 13%, var(--surface));
+    color: var(--accent);
+  }
+  .switcher button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- exhibit gallery ---------- */
+  .gallery {
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
+  }
+  .exhibit {
+    border: 1px solid var(--hairline-soft); border-radius: 18px;
+    background: var(--surface); overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: transform .5s cubic-bezier(.16,1,.3,1), box-shadow .5s;
+  }
+  .exhibit:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .exhibit .frame {
+    aspect-ratio: 1/1.12; position: relative;
+    background: radial-gradient(120% 120% at 32% 20%, var(--ex-wash), transparent 62%);
+    border-bottom: 1px solid var(--hairline-soft);
+  }
+  .exhibit .frame svg { position: absolute; inset: 0; width: 100%; height: 100%; padding: 11%; }
+  .exhibit .meta { padding: .85rem .95rem 1rem; display: flex; flex-direction: column; gap: .18rem; }
+  .exhibit .meta .name { font-size: .875rem; font-weight: 500; letter-spacing: -.01em; }
+  .exhibit .meta .latin { font-family: "IBM Plex Mono", monospace; font-size: .66rem; font-style: italic; color: var(--ink-mute); }
+  .exhibit .meta .beh { font-size: .74rem; color: var(--ink-soft); margin-top: .35rem; line-height: 1.45; }
+
+  /* ---------- cards / grids ---------- */
+  .cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); }
+  .card {
+    border: 1px solid var(--hairline-soft); border-radius: 16px;
+    background: var(--surface); padding: 1.25rem 1.35rem;
+    display: flex; flex-direction: column; gap: .5rem;
+  }
+  .card h3 { font-family: Inter, sans-serif; font-size: .95rem; font-weight: 600; letter-spacing: -.005em; }
+  .card p { font-size: .865rem; color: var(--ink-soft); line-height: 1.55; }
+
+  /* ---------- spec table ---------- */
+  .specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px;
+           background: var(--hairline-soft); border: 1px solid var(--hairline-soft); border-radius: 14px; overflow: hidden; }
+  .specs div { background: var(--surface); padding: .85rem 1rem; }
+  .specs dt { font-size: .625rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute); }
+  .specs dd { margin: .28rem 0 0; font-size: .875rem; font-weight: 500; }
+
+  /* ---------- API demo ---------- */
+  .api { border: 1px solid var(--hairline-soft); border-radius: 16px; overflow: hidden; background: var(--surface); }
+  .api header {
+    display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+    padding: .7rem 1rem; border-bottom: 1px solid var(--hairline-soft); background: var(--surface-sunk);
+  }
+  .verb { font-family: "IBM Plex Mono", monospace; font-size: .68rem; font-weight: 500;
+          padding: .16rem .45rem; border-radius: 5px; background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); }
+  .api .path { font-family: "IBM Plex Mono", monospace; font-size: .78rem; color: var(--ink-soft); }
+  .api .body { padding: 1rem; overflow-x: auto; }
+  .api pre { margin: 0; font-family: "IBM Plex Mono", monospace; font-size: .74rem; line-height: 1.65; color: var(--ink-soft); }
+  .k { color: var(--ink); } .s { color: var(--accent); }
+  .v-stop { color: var(--stop); font-weight: 500; } .v-ok { color: var(--ok); font-weight: 500; }
+
+  .verdict { display: flex; gap: .55rem; align-items: flex-start; padding: .7rem 0; border-top: 1px solid var(--hairline-soft); }
+  .verdict:first-of-type { border-top: 0; }
+  .chip { flex: none; font-size: .625rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+          padding: .2rem .5rem; border-radius: 999px; margin-top: .1rem; }
+  .chip.stop { background: color-mix(in srgb, var(--stop) 13%, transparent); color: var(--stop); }
+  .chip.rev  { background: color-mix(in srgb, var(--ink-mute) 15%, transparent); color: var(--ink-soft); }
+  .verdict .txt { font-size: .82rem; color: var(--ink-soft); line-height: 1.5; }
+  .verdict .txt b { color: var(--ink); font-weight: 500; }
+
+  /* ---------- status ---------- */
+  .status { display: flex; flex-direction: column; }
+  .status-row { display: grid; grid-template-columns: 84px 1fr; gap: 1rem;
+                padding: .85rem 0; border-top: 1px solid var(--hairline-soft); align-items: start; }
+  .status-row:first-child { border-top: 0; }
+  .badge { font-size: .625rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+           padding: .22rem .5rem; border-radius: 6px; text-align: center; }
+  .badge.built { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+  .badge.part  { background: color-mix(in srgb, var(--micro) 20%, transparent); color: var(--micro); }
+  .badge.no    { background: color-mix(in srgb, var(--ink-mute) 14%, transparent); color: var(--ink-mute); }
+  .status-row .what { font-size: .875rem; }
+  .status-row .what span { display: block; color: var(--ink-mute); font-size: .8rem; margin-top: .12rem; line-height: 1.5; }
+
+  .note {
+    border-left: 2px solid var(--accent); padding: .1rem 0 .1rem 1.1rem;
+    color: var(--ink-soft); font-size: .9rem; line-height: 1.6;
+  }
+
+  footer { border-top: 1px solid var(--hairline-soft); padding-block: 2.5rem 3.5rem; }
+
+  /* ================= specimen animations ================= */
+  svg .lim { fill: none; stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+  svg g, svg path, svg circle { transform-box: view-box; }
+
+  /* Hydro — vertical drift, fin undulation, pectoral flutter */
+  .hydro-body   { animation: drift 11s ease-in-out infinite; transform-origin: 100px 120px; }
+  .hydro-caudal { animation: caudal 3.6s ease-in-out infinite; transform-origin: 84px 120px; }
+  .hydro-pect   { animation: pect 2.1s ease-in-out infinite; transform-origin: 124px 126px; }
+  .hydro-dorsal { animation: finsway 6s ease-in-out infinite; transform-origin: 106px 84px; }
+  .hydro-anal   { animation: finsway 6s ease-in-out infinite .3s; transform-origin: 106px 156px; }
+  @keyframes drift { 0%,100%{transform:translateY(0)} 30%{transform:translateY(-7px)} 68%{transform:translateY(5px)} }
+  @keyframes caudal { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-8deg)} 75%{transform:rotate(8deg)} }
+  @keyframes pect { 0%,100%{transform:rotate(0)} 50%{transform:rotate(14deg)} }
+  @keyframes finsway { 0%,100%{transform:rotate(0)} 50%{transform:rotate(-3.5deg)} }
+
+  /* Aether — perch sway, alert head-turn, wing settle */
+  .aeth-body { animation: sway 7s ease-in-out infinite; transform-origin: 100px 196px; }
+  .aeth-head { animation: headturn 9s ease-in-out infinite; transform-origin: 100px 96px; }
+  .aeth-wing { animation: wing 8s ease-in-out infinite; transform-origin: 92px 112px; }
+  .aeth-tail { animation: tailsway 7s ease-in-out infinite; transform-origin: 100px 190px; }
+  @keyframes sway { 0%,100%{transform:rotate(0)} 25%{transform:rotate(1.6deg)} 75%{transform:rotate(-1.6deg)} }
+  @keyframes tailsway { 0%,100%{transform:rotate(0)} 25%{transform:rotate(3.5deg)} 75%{transform:rotate(-3.5deg)} }
+  @keyframes headturn {
+    0%,14%{transform:rotate(0)} 24%,38%{transform:rotate(14deg)}
+    47%,61%{transform:rotate(0)} 71%,85%{transform:rotate(-11deg)} 100%{transform:rotate(0)}
+  }
+  @keyframes wing { 0%,55%{transform:rotate(0)} 65%{transform:rotate(-20deg)} 75%,100%{transform:rotate(0)} }
+
+  /* Micro — petal sway, tracking head, single strike-fold */
+  .micro-all  { animation: petalsway 12s ease-in-out infinite; transform-origin: 100px 200px; }
+  .micro-head { animation: track 12s ease-in-out infinite; transform-origin: 100px 122px; }
+  .micro-armL { animation: strikeL 12s ease-out infinite; transform-origin: 94px 128px; }
+  .micro-armR { animation: strikeR 12s ease-out infinite; transform-origin: 109px 128px; }
+  @keyframes petalsway {
+    0%{transform:rotate(0)} 8%{transform:rotate(2.4deg)} 14%{transform:rotate(-1.4deg)}
+    20%{transform:rotate(2deg)} 28%,100%{transform:rotate(0)}
+  }
+  @keyframes track { 0%,40%{transform:rotate(0)} 50%,66%{transform:rotate(16deg)} 76%,100%{transform:rotate(0)} }
+  @keyframes strikeL { 0%,55%{transform:rotate(0)} 58.5%{transform:rotate(-26deg)} 63%,100%{transform:rotate(0)} }
+  @keyframes strikeR { 0%,55%{transform:rotate(0)} 58.5%{transform:rotate(26deg)} 63%,100%{transform:rotate(0)} }
+
+  /* Terra — respiratory coil expansion, tongue flick */
+  .terra-coil { animation: respire 8.5s ease-in-out infinite; transform-origin: 100px 155px; }
+  .terra-head { animation: headrest 13s ease-in-out infinite; transform-origin: 96px 152px; }
+  .terra-tongue { animation: flick 13s linear infinite; }
+  @keyframes respire { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
+  @keyframes headrest { 0%,42%{transform:rotate(0)} 50%{transform:rotate(2.5deg)} 58%,100%{transform:rotate(0)} }
+  @keyframes flick {
+    0%,44%{opacity:0} 46.5%{opacity:1} 49%,52%{opacity:0} 54.5%{opacity:1} 57%,100%{opacity:0}
+  }
+
+  /* Sylvan — throat pulse, settle, rare blink */
+  .syl-body   { animation: settle 6s ease-in-out infinite; transform-origin: 100px 186px; }
+  .syl-throat { animation: throat 1.5s ease-in-out infinite; transform-origin: 100px 168px; }
+  .syl-eyes   { animation: blink 9s ease-in-out infinite; transform-origin: 100px 136px; }
+  @keyframes settle { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-1.5px) scaleY(1.012)} }
+  @keyframes throat { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(1.55) translateY(2px)} }
+  @keyframes blink { 0%,72%{transform:scaleY(1)} 75%{transform:scaleY(.08)} 78%,100%{transform:scaleY(1)} }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+                             transition-duration: .001ms !important; }
+  }
+</style>
+
+<header class="masthead">
+  <div class="wrap">
+    <span class="wordmark">Atelier&nbsp;Fauna</span>
+    <span class="mono">Working demo · 5 exhibits</span>
+  </div>
+</header>
+
+<main>
+  <section class="wrap">
+    <div class="hero">
+      <div class="stack g24">
+        <span class="eyebrow" id="hero-eyebrow">Regnum Aquaticum · Abyssal Equilibrium</span>
+        <h1 id="hero-title">The Dignity of Buoyancy</h1>
+        <p class="lede" id="hero-lede">Towering lateral symmetry that drifts through zero-current waters.</p>
+        <span class="pill"><span class="dot breathe"></span><span id="hero-status">Available for placement</span></span>
+
+        <div class="switcher" role="tablist" aria-label="Select exhibit">
+          <button role="tab" aria-selected="true"  data-b="hydro">Hydro</button>
+          <button role="tab" aria-selected="false" data-b="aether">Aether</button>
+          <button role="tab" aria-selected="false" data-b="micro">Micro</button>
+          <button role="tab" aria-selected="false" data-b="terra">Terra</button>
+          <button role="tab" aria-selected="false" data-b="sylvan">Sylvan</button>
+        </div>
+        <p class="small" style="max-width:44ch">Switch exhibits — the specimen, palette and ambient ground all change, as they do in the real app.</p>
+      </div>
+
+      <div class="vitrine" id="vitrine">
+        <div id="vitrine-svg"></div>
+        <span class="tag" id="vitrine-tag">Hydro specimen</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="wrap stack g32">
+    <div class="stack g12">
+      <span class="eyebrow neutral">The collection</span>
+      <h2>One animal per exhibit</h2>
+      <p class="lede">Five exhibits, five animals. Each carries real care specifications, its own Sanctuary Journal essay, and a behavioural loop built from how that species actually rests — not a generic idle wobble.</p>
+    </div>
+
+    <div class="gallery" id="gallery"></div>
+
+    <p class="note">Every loop above is running live in your browser right now. They are deliberately abstract line art rather than attempted photorealism: at this fidelity a silhouette reads as intentional design, where a not-quite-right 3D animal reads as broken.</p>
+  </section>
+
+  <hr class="rule">
+
+  <section class="wrap stack g32">
+    <div class="stack g12 narrow">
+      <span class="eyebrow neutral">Dossier</span>
+      <h2>Care specifications, not product copy</h2>
+      <p class="lede">Opening a specimen expands its card into a full technical dossier. These are the real values for the exhibit selected above.</p>
+    </div>
+    <dl class="specs" id="specs"></dl>
+  </section>
+
+  <hr class="rule">
+
+  <section class="wrap stack g32">
+    <div class="stack g12 narrow">
+      <span class="eyebrow neutral">Backend</span>
+      <h2>The gate is in the API, not the button</h2>
+      <p class="lede">A buyer submits the species they want. Screening runs server-side, because a check that only lives in the interface is not a control — anyone can post directly to the endpoint.</p>
+    </div>
+
+    <div class="api">
+      <header>
+        <span class="verb">POST</span>
+        <span class="path">/api/species-intake</span>
+        <span class="mono" style="margin-left:auto;color:var(--ink-mute)">201 · real response</span>
+      </header>
+      <div class="body">
+        <pre><span class="k">{</span>
+  <span class="k">"email"</span>: <span class="s">"buyer@example.com"</span>,
+  <span class="k">"requestedSpecies"</span>: [<span class="s">"Neon Tetra"</span>, <span class="s">"Channa marulius"</span>, <span class="s">"Walking Catfish"</span>, <span class="s">"Orchid Mantis"</span>]
+<span class="k">}</span></pre>
+      </div>
+      <div class="body" style="border-top:1px solid var(--hairline-soft)">
+        <div class="verdict">
+          <span class="chip stop">Excluded</span>
+          <span class="txt"><b>Channa marulius</b> — Snakehead species are US injurious wildlife; live specimens and viable eggs are prohibited from import.<br><span class="mono" style="color:var(--ink-mute)">USFWS · Lacey Act, 50 CFR Part 16</span></span>
+        </div>
+        <div class="verdict">
+          <span class="chip stop">Excluded</span>
+          <span class="txt"><b>Walking Catfish</b> — The entire Clariidae family is listed injurious, with no permit pathway for the pet trade.<br><span class="mono" style="color:var(--ink-mute)">USFWS · Lacey Act, 50 CFR Part 16</span></span>
+        </div>
+        <div class="verdict">
+          <span class="chip rev">Needs review</span>
+          <span class="txt"><b>Neon Tetra</b> · <b>Orchid Mantis</b> — No exclusion rule matched. This is <em>not</em> a clearance; legality has not been established.</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="note">The screening model is reject-only by design. The verdict type has no <span class="mono">approved</span> value and never will — it can say “definitely prohibited”, never “legal”. Legality is per-species and per-jurisdiction, turning on federal law, CITES <em>and</em> destination-state rules. No automated check can settle that.</p>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Readiness checklist required</h3>
+        <p>An inquiry that skips the custodianship checklist is rejected outright by the API — not quietly saved as a lead.</p>
+      </div>
+      <div class="card">
+        <h3>Sanctuary-only is enforced</h3>
+        <p>Requesting an animal marked display-only returns a refusal naming the species. Accepting it would be a promise that can’t be kept.</p>
+      </div>
+      <div class="card">
+        <h3>Consultation, not checkout</h3>
+        <p>There is no cart. The endpoint records an intent to have a conversation — no payment, no reservation, no animal committed.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="wrap stack g32">
+    <div class="stack g12 narrow">
+      <span class="eyebrow neutral">Honest status</span>
+      <h2>What is built, and what isn’t</h2>
+      <p class="lede">The eventual pipeline — buyer list, researched species, generated 3D model with real behaviour — is several hard problems stacked, not one feature. This is where it actually stands.</p>
+    </div>
+
+    <div class="status">
+      <div class="status-row"><span class="badge built">Built</span>
+        <span class="what">Species intake &amp; screening API<span>Validation, rate limiting, persistence, reject-only legal screen.</span></span></div>
+      <div class="status-row"><span class="badge built">Built</span>
+        <span class="what">Consultation flow with server-side ethical gates<span>Three-step drawer wired to a real endpoint with loading and error states.</span></span></div>
+      <div class="status-row"><span class="badge built">Built</span>
+        <span class="what">Behavioural animation for all five exhibits<span>Hand-authored from each species’ real resting behaviour.</span></span></div>
+      <div class="status-row"><span class="badge part">Partial</span>
+        <span class="what">3D model rendering<span>The viewer loads a rigged .glb and loops its idle clip. No model exists yet — setting one field switches a specimen over.</span></span></div>
+      <div class="status-row"><span class="badge no">Not built</span>
+        <span class="what">Species research → publishable care specs<span>Every field needs a source and human sign-off. A wrong care spec is a welfare failure, not a content bug.</span></span></div>
+      <div class="status-row"><span class="badge no">Not built</span>
+        <span class="what">Reference imagery sourcing<span>A licensing problem before it is a technical one.</span></span></div>
+      <div class="status-row"><span class="badge no">Not built</span>
+        <span class="what">Image-to-3D generation and rigging<span>External service; per-species tuning expected. Rigging insects and snakes will likely need a human.</span></span></div>
+      <div class="status-row"><span class="badge no">Not built</span>
+        <span class="what">Notification on new inquiries<span>Submissions persist to disk and nothing tells anyone yet.</span></span></div>
+    </div>
+
+    <p class="note">Suggested next step: take one specimen — Hydro, the simplest body plan — source real photography by hand, run it through a generation service once, and drop the resulting <span class="mono">.glb</span> into the data file. That validates the whole receiving pipeline with zero new code, before deciding what is worth automating.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p class="small">Atelier Fauna · demo build. Selling live reptiles and insects direct-to-consumer carries state-level regulatory obligations distinct from the federal screening shown here; verify per species and destination before any real transaction.</p>
+</footer>
+
+<script>
+const EX = {
+  hydro: {
+    name: "Orinoco Altum Angelfish", latin: "Pterophyllum altum",
+    aura: "The Dignity of Buoyancy", eyebrow: "Regnum Aquaticum · Abyssal Equilibrium",
+    lede: "Towering lateral symmetry that drifts through zero-current waters.",
+    status: "Available for placement", beh: "Slow vertical drift; fin undulation; independent pectoral flutter.",
+    specs: [["Custodianship","Mindful"],["Space","120 gal vertical biotope"],["Temperature","28–30 °C"],["Humidity","100% submerged"],["Light","Low diffused"],["Lifespan","10–12 years"]],
+    svg: `<g class="lim" stroke="var(--accent)">
+      <g class="hydro-body">
+        <path class="hydro-dorsal" d="M96 84 C104 56 116 34 134 18 C130 42 122 66 116 88"/>
+        <path class="hydro-anal" d="M96 156 C104 184 116 206 134 222 C130 198 122 174 116 152"/>
+        <path d="M150 120 C142 104 126 88 106 82 C92 92 84 106 84 120 C84 134 92 148 106 158 C126 152 142 136 150 120 Z"/>
+        <path d="M112 158 C114 182 112 202 106 220"/>
+        <path class="hydro-caudal" d="M84 120 C70 108 58 102 48 100 C54 112 54 128 48 140 C58 138 70 132 84 120 Z"/>
+        <path class="hydro-pect" d="M124 126 C132 132 136 142 133 150"/>
+        <path d="M150 120 C146 116 142 114 138 114" opacity=".6"/>
+        <circle cx="136" cy="112" r="2.6" fill="var(--accent)" stroke="none"/>
+        <path d="M124 92 C120 110 120 132 124 150" opacity=".32"/>
+        <path d="M108 84 C104 106 104 136 108 158" opacity=".32"/>
+      </g></g>`
+  },
+  aether: {
+    name: "Rainbow Lorikeet", latin: "Trichoglossus moluccanus",
+    aura: "Weightless Colour in Motion", eyebrow: "Regnum Avium · Weightless Resonances",
+    lede: "A spectrum given wings — never still, never frantic.",
+    status: "Sanctuary only · display", beh: "Perch sway; periodic alert head-turn; occasional wing settle.",
+    specs: [["Custodianship","Master custodian"],["Space","Walk-in aviary, 3 m span"],["Temperature","20–28 °C"],["Humidity","50–65%"],["Light","Natural diurnal"],["Lifespan","20–30 years"]],
+    svg: `<g class="lim" stroke="var(--accent)">
+      <path d="M40 196 L160 196" opacity=".5"/>
+      <g class="aeth-body">
+        <path d="M100 96 C122 96 134 122 132 150 C130 176 116 192 100 192 C84 192 70 176 68 150 C66 122 78 96 100 96 Z"/>
+        <g class="aeth-head">
+          <circle cx="100" cy="76" r="21"/>
+          <path d="M118 70 C128 72 132 78 128 84 C124 88 118 86 116 82"/>
+          <circle cx="108" cy="70" r="2.4" fill="var(--accent)" stroke="none"/>
+        </g>
+        <path class="aeth-wing" d="M92 112 C74 122 66 146 72 168 C80 162 88 146 92 128"/>
+        <path class="aeth-tail" d="M100 190 C104 208 106 222 104 234"/>
+        <path d="M94 192 L92 197 M106 192 L108 197"/>
+      </g></g>`
+  },
+  micro: {
+    name: "Pink Orchid Mantis", latin: "Hymenopus coronatus",
+    aura: "The Architecture of Disguise", eyebrow: "Regnum Insectorum · Sculptural Stillness",
+    lede: "Living flora mimicry that turns patience into supreme art.",
+    status: "In sanctuary lineage · waitlist", beh: "Near-total stillness; petal-mimic wind sway; one fast strike-fold.",
+    specs: [["Custodianship","Intermediate"],["Space","20×20×30 cm vivarium"],["Temperature","25–28 °C"],["Humidity","70–85%"],["Light","Low diffused"],["Lifespan","8–12 months"]],
+    svg: `<g class="lim micro-all" stroke="var(--accent)">
+      <path d="M100 200 L100 232" opacity=".5"/>
+      <path d="M100 200 C88 190 84 172 90 158 C96 146 108 146 113 158 C119 172 114 190 100 200 Z"/>
+      <path d="M100 156 L100 122"/>
+      <path d="M90 176 C74 178 64 170 66 158 C76 154 88 162 90 172"/>
+      <path d="M113 176 C129 178 139 170 137 158 C127 154 115 162 113 172"/>
+      <path d="M92 150 C78 148 70 138 74 128 C84 128 92 138 93 146"/>
+      <path d="M111 150 C125 148 133 138 129 128 C119 128 111 138 110 146"/>
+      <g class="micro-head">
+        <path d="M100 122 C93 122 89 116 91 110 C95 105 105 105 109 110 C111 116 107 122 100 122 Z"/>
+        <circle cx="94" cy="111" r="1.9" fill="var(--accent)" stroke="none"/>
+        <circle cx="106" cy="111" r="1.9" fill="var(--accent)" stroke="none"/>
+        <path d="M95 105 C92 96 90 90 91 84 M105 105 C108 96 110 90 109 84"/>
+      </g>
+      <path class="micro-armL" d="M94 128 C84 132 78 142 80 152"/>
+      <path class="micro-armR" d="M109 128 C119 132 125 142 123 152"/>
+    </g>`
+  },
+  terra: {
+    name: "Amazon Emerald Tree Boa", latin: "Corallus caninus",
+    aura: "Coiled Thermal Balance", eyebrow: "Regnum Reptilia · Ancient Grounding",
+    lede: "Sculptural emerald coils draped across ancient mahogany branches.",
+    status: "Available for placement", beh: "Slow respiratory expansion of the coil; periodic tongue flick.",
+    specs: [["Custodianship","Master custodian"],["Space","90×60×120 cm arboreal"],["Temperature","26–31 °C gradient"],["Humidity","75–90%"],["Light","Natural diurnal"],["Lifespan","15–20 years"]],
+    svg: `<g class="lim" stroke="var(--accent)">
+      <path d="M22 116 C74 106 128 106 180 116" opacity=".45" stroke-width="2"/>
+      <g class="terra-coil">
+        <path d="M70 112 C50 140 54 178 80 186 C106 194 120 168 106 146" opacity=".55"/>
+        <path d="M100 110 C80 140 84 180 110 187 C136 194 149 166 134 144" opacity=".75"/>
+        <path d="M130 112 C114 138 118 172 140 178" opacity=".55"/>
+        <g class="terra-head">
+          <path d="M96 152 C110 144 128 145 138 154 C128 163 110 163 96 158 Z"/>
+          <circle cx="127" cy="151" r="2.3" fill="var(--accent)" stroke="none"/>
+          <path class="terra-tongue" d="M138 155 L150 155 M150 155 L156 151 M150 155 L156 159"/>
+        </g>
+      </g></g>`
+  },
+  sylvan: {
+    name: "Golden Mantella", latin: "Mantella aurantiaca",
+    aura: "A Small Fire in Green Shade", eyebrow: "Regnum Silvestre · Canopy Density",
+    lede: "An ember-bright amphibian moving through the density of the forest floor.",
+    status: "In sanctuary lineage · waitlist", beh: "Continuous throat pulse; whole-body settle; rare blink.",
+    specs: [["Custodianship","Intermediate"],["Space","45×45×60 cm paludarium"],["Temperature","22–26 °C"],["Humidity","80–100%"],["Light","Low diffused"],["Lifespan","6–8 years"]],
+    svg: `<g class="lim" stroke="var(--accent)">
+      <path d="M34 186 C70 180 130 180 166 186" opacity=".45"/>
+      <g class="syl-body">
+        <path d="M100 122 C126 122 142 146 142 164 C142 178 128 186 100 186 C72 186 58 178 58 164 C58 146 74 122 100 122 Z"/>
+        <path class="syl-throat" d="M84 168 C92 176 108 176 116 168"/>
+        <circle cx="82" cy="136" r="7"/><circle cx="118" cy="136" r="7"/>
+        <g class="syl-eyes">
+          <circle cx="82" cy="136" r="3" fill="var(--accent)" stroke="none"/>
+          <circle cx="118" cy="136" r="3" fill="var(--accent)" stroke="none"/>
+        </g>
+        <path d="M70 178 C64 184 60 190 62 194 M130 178 C136 184 140 190 138 194"/>
+        <path d="M138 168 C150 170 156 180 152 190"/>
+      </g></g>`
+  }
+};
+
+const ORDER = ["hydro","aether","micro","terra","sylvan"];
+const WASH = { hydro:"75,139,166", aether:"116,132,154", micro:"169,141,87", terra:"176,113,75", sylvan:"85,131,100" };
+
+function frame(key, cls){
+  return `<svg viewBox="0 0 200 240" role="img" aria-label="${EX[key].name}" class="${cls||''}">${EX[key].svg}</svg>`;
+}
+
+// Gallery — all five animating at once
+document.getElementById("gallery").innerHTML = ORDER.map(k => {
+  const e = EX[k];
+  return `<article class="exhibit" style="--accent:var(--${k});--ex-wash:rgba(${WASH[k]},.13)">
+    <div class="frame">${frame(k)}</div>
+    <div class="meta">
+      <span class="name">${e.name}</span>
+      <span class="latin">${e.latin}</span>
+      <span class="beh">${e.beh}</span>
+    </div>
+  </article>`;
+}).join("");
+
+const vit = document.getElementById("vitrine");
+function select(key){
+  const e = EX[key];
+  document.documentElement.style.setProperty("--accent", `var(--${key})`);
+  document.documentElement.style.setProperty("--biome-wash", `rgba(${WASH[key]},.13)`);
+  document.getElementById("vitrine-svg").innerHTML = frame(key);
+  document.getElementById("vitrine-tag").textContent = e.name.split(" ").slice(-1)[0] === "Mantella"
+    ? "Sylvan specimen" : key.charAt(0).toUpperCase()+key.slice(1)+" specimen";
+  document.getElementById("hero-eyebrow").textContent = e.eyebrow;
+  document.getElementById("hero-title").textContent = e.aura;
+  document.getElementById("hero-lede").textContent = e.lede;
+  document.getElementById("hero-status").textContent = e.status;
+  document.querySelector(".dot").className = "dot" + (e.status.startsWith("Available") ? " breathe" : "");
+  document.getElementById("specs").innerHTML = e.specs
+    .map(([k2,v]) => `<div><dt>${k2}</dt><dd>${v}</dd></div>`).join("");
+  document.querySelectorAll(".switcher button").forEach(b =>
+    b.setAttribute("aria-selected", String(b.dataset.b === key)));
+}
+
+document.querySelectorAll(".switcher button").forEach(b =>
+  b.addEventListener("click", () => select(b.dataset.b)));
+
+select("hydro");
+</script>
