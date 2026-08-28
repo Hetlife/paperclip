@@ -12,6 +12,7 @@ import { GENTLE_EASE } from "@/lib/motion";
 interface InquestData {
   availableSpace?: string;
   experienceNote?: string;
+  acknowledged?: boolean;
   email?: string;
   preferredWindow?: string;
 }
@@ -23,6 +24,8 @@ export function CustodianDrawer() {
 
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [data, setData] = useState<InquestData>({});
 
   function handleClose() {
@@ -31,8 +34,48 @@ export function CustodianDrawer() {
     setTimeout(() => {
       setStep(0);
       setSubmitted(false);
+      setSubmitting(false);
+      setSubmitError(null);
       setData({});
     }, 400);
+  }
+
+  async function submitInquest(final: { email: string; preferredWindow: string }) {
+    setSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: final.email,
+          preferredWindow: final.preferredWindow,
+          availableSpace: data.availableSpace,
+          experienceNote: data.experienceNote,
+          acknowledgedChecklist: data.acknowledged === true,
+          specimenId: specimen?.id,
+        }),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        const message =
+          payload?.errors?.join(" ") ||
+          payload?.error ||
+          "Something went wrong submitting your inquest. Please try again.";
+        setSubmitError(message);
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setSubmitError(
+        "Could not reach the Atelier. Check your connection and try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -118,13 +161,12 @@ export function CustodianDrawer() {
                 {step === 2 && (
                   <StepScheduleConsult
                     submitted={submitted}
+                    submitting={submitting}
+                    error={submitError}
                     onBack={() => setStep(1)}
                     onSubmit={(d) => {
                       setData((prev) => ({ ...prev, ...d }));
-                      // No backend wired yet — this is a UI-complete flow.
-                      // See apps/atelier-fauna/README.md for what's needed
-                      // to make submission real (API route + storage/CRM).
-                      setSubmitted(true);
+                      void submitInquest(d);
                     }}
                   />
                 )}

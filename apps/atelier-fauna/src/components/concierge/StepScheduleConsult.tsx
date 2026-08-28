@@ -15,10 +15,14 @@ export function StepScheduleConsult({
   onBack,
   onSubmit,
   submitted,
+  submitting = false,
+  error = null,
 }: {
   onBack: () => void;
   onSubmit: (data: { email: string; preferredWindow: string }) => void;
   submitted: boolean;
+  submitting?: boolean;
+  error?: string | null;
 }) {
   const [email, setEmail] = useState("");
   const [preferredWindow, setPreferredWindow] = useState("");
@@ -88,17 +92,26 @@ export function StepScheduleConsult({
         ))}
       </fieldset>
 
+      {error && (
+        <p
+          role="alert"
+          className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+        >
+          {error}
+        </p>
+      )}
+
       <div className="flex justify-between">
-        <SpringButton variant="ghost" onClick={onBack}>
+        <SpringButton variant="ghost" onClick={onBack} disabled={submitting}>
           Back
         </SpringButton>
         <SpringButton
           variant="primary"
-          disabled={!email || !preferredWindow}
+          disabled={!email || !preferredWindow || submitting}
           className="disabled:opacity-40"
           onClick={() => onSubmit({ email, preferredWindow })}
         >
-          Submit Inquest
+          {submitting ? "Submitting…" : "Submit Inquest"}
         </SpringButton>
       </div>
     </div>

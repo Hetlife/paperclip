@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { Component, useState, type ReactNode } from "react";
 import type { BiomeId } from "@/types/fauna";
 import { BIOMES } from "@/data/faunaData";
+import { SpecimenAnimation } from "@/components/specimens/SpecimenAnimation";
 import { cn } from "@/lib/cn";
 
 // three.js + fiber are heavy; only pull them into the bundle for specimens
@@ -42,7 +43,7 @@ export function SpecimenMedia({
 
   if (model3dUrl && !modelFailed) {
     return (
-      <div className={cn("relative overflow-hidden", className)}>
+      <div className={cn("absolute inset-0 overflow-hidden", className)}>
         <ModelErrorBoundary onError={() => setModelFailed(true)}>
           <Specimen3DViewer modelUrl={model3dUrl} />
         </ModelErrorBoundary>
@@ -53,13 +54,21 @@ export function SpecimenMedia({
   if (imageFailed || (!src && !model3dUrl)) {
     return (
       <div
-        className={cn("relative overflow-hidden", className)}
+        // absolute inset-0, not relative: callers size the parent (aspect
+        // ratio or min-height) and pass no dimensions here, matching how
+        // next/image `fill` positions itself. A relative box collapses to
+        // zero height and renders nothing.
+        className={cn("absolute inset-0 overflow-hidden", className)}
         style={{
           background: `radial-gradient(120% 120% at 30% 20%, ${biome.themeColor.glow}, transparent 60%), linear-gradient(160deg, ${biome.themeColor.bgLight}, ${biome.themeColor.bgDark}22)`,
         }}
         aria-label={alt}
         role="img"
       >
+        <SpecimenAnimation
+          biomeId={biomeId}
+          className="absolute inset-0 flex items-center justify-center p-8"
+        />
         <span
           className="absolute bottom-4 left-4 text-xs uppercase tracking-[0.15em] font-medium"
           style={{ color: biome.themeColor.accent }}

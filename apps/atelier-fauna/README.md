@@ -21,30 +21,41 @@ npm run typecheck
 
 ## What's real vs. not yet
 
-**Working end-to-end**, verified by build + a live browser pass this
-session:
+**Docs:** `docs/REQUIREMENTS.md` (feature requirements for the AI species
+pipeline, with what's built vs. not) · `docs/BACKEND.md` (API reference +
+gaps) · `ROADMAP.md` (the photo-to-3D pipeline).
+
+**Working end-to-end**, verified by build + live browser and API passes
+this session:
 - 5 biomes (Hydro, Aether, Micro, Terra, Sylvan) with the sliding pill
   selector, theme-color background transitions, and per-biome canvas
   particle atmospheres
-- 6 specimens (one extra per biome beyond the spec's original 3, so
-  every biome has content) with 3D tilt cards, `layoutId` morph into a
-  fullscreen dossier modal, and full care-spec tables
-- 6 Sanctuary Journal essays (the spec's original 3, plus 3 more
-  matching the added specimens), index + individual article pages
+- **One specimen per exhibit** (5 total) with 3D tilt cards, `layoutId`
+  morph into a fullscreen dossier modal, and full care-spec tables
+- **A behavioral animation for each of the 5 exhibits**, hand-authored
+  from each species' real resting behavior (`docs/REQUIREMENTS.md` R6.5)
+  — deliberately abstract line art, not attempted photorealism
+- 5 Sanctuary Journal essays, one per exhibit; index + article pages
 - The 3-step Custodianship Readiness & Consultation drawer (habitat
-  review → readiness checklist → schedule request), with real
-  client-side validation and step gating
+  review → readiness checklist → schedule request), wired to a real API
+  with loading and error states
+- **Backend**: `POST /api/inquiries` and `POST /api/species-intake` with
+  validation, rate limiting, file-backed persistence, and server-side
+  ethical gates — the readiness checklist is required and sanctuary-only
+  specimens are rejected in the API, not just the UI. See
+  `docs/BACKEND.md`.
 
-**Not real yet — this is a frontend-only build:**
-- **No backend.** The consultation drawer's final "Submit Inquest" step
-  sets local UI state to "submitted" — it does not send an email, hit
-  an API, or store anything. Wiring this to a real inbox/CRM is the
-  next concrete step before this could take a real inquiry.
+**Not real yet:**
 - **No photography.** `assets.heroImage` paths in `faunaData.ts` point
   to files that don't exist (`/images/specimens/*.jpg`). Every image
-  slot gracefully falls back to a themed gradient card via
-  `SpecimenMedia.tsx` rather than a broken image — replace the paths
-  with real photography when it exists, no code changes needed.
+  slot falls back to an animated line-art specimen over a themed
+  gradient via `SpecimenMedia.tsx` rather than a broken image — replace
+  the paths with real photography when it exists, no code changes
+  needed.
+- **Backend exists but nothing is notified.** A submitted inquiry
+  persists to a JSON file and no email/Slack/CRM hook fires, so
+  inquiries would sit unread. See `docs/BACKEND.md` → "Before this
+  handles real traffic" for the full honest gap list.
 - **No real 3D models yet, but the viewer is wired.**
   `Specimen3DViewer.tsx` (react-three-fiber) loads a `.glb` and loops
   its `"Idle"` animation clip; `SpecimenMedia.tsx` prefers it over the
