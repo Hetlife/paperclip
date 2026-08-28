@@ -1,0 +1,823 @@
+<title>Atelier Fauna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap">
+
+<style>
+  :root {
+    --ground: #FBFBFD;
+    --surface: #FFFFFF;
+    --sunk: #F4F6F8;
+    --ink: #14161A;
+    --ink-soft: #4A5058;
+    --ink-mute: #757D88;
+    --line: rgba(15, 22, 32, .10);
+    --line-soft: rgba(15, 22, 32, .055);
+    --glass: rgba(255,255,255,.72);
+    --shadow: 0 1px 2px rgba(12,20,30,.04), 0 18px 44px -22px rgba(12,20,30,.22);
+    --ok: #2F7D57;
+    --stop: #B4453C;
+    --hydro:#4B8BA6; --aether:#74849A; --micro:#A98D57; --terra:#B0714B; --sylvan:#558364;
+    --accent: var(--hydro);
+    --wash: rgba(75,139,166,.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0A0B0D; --surface:#131519; --sunk:#0F1114;
+      --ink:#EDEFF2; --ink-soft:#B0B7C0; --ink-mute:#7E8792;
+      --line:rgba(235,240,248,.13); --line-soft:rgba(235,240,248,.07);
+      --glass: rgba(19,21,25,.72);
+      --shadow: 0 1px 2px rgba(0,0,0,.5), 0 22px 50px -24px rgba(0,0,0,.8);
+      --ok:#5FBE8B; --stop:#E2776C;
+      --hydro:#6FAAC4; --aether:#96A6BB; --micro:#CBAC6B; --terra:#D08F63; --sylvan:#74A484;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0A0B0D; --surface:#131519; --sunk:#0F1114;
+    --ink:#EDEFF2; --ink-soft:#B0B7C0; --ink-mute:#7E8792;
+    --line:rgba(235,240,248,.13); --line-soft:rgba(235,240,248,.07);
+    --glass: rgba(19,21,25,.72);
+    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 22px 50px -24px rgba(0,0,0,.8);
+    --ok:#5FBE8B; --stop:#E2776C;
+    --hydro:#6FAAC4; --aether:#96A6BB; --micro:#CBAC6B; --terra:#D08F63; --sylvan:#74A484;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin:0; background: var(--ground); color: var(--ink);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased;
+    transition: background-color .8s cubic-bezier(.16,1,.3,1);
+  }
+  .wrap { max-width: 1120px; margin:0 auto; padding: 0 clamp(1rem,4vw,2rem); }
+  .narrow { max-width: 42rem; }
+  h1,h2,h3 { margin:0; letter-spacing:-.025em; text-wrap:balance; font-weight:600; }
+  h1 { font-size: clamp(2.4rem,6vw,3.6rem); line-height:1.05; }
+  h2 { font-size: clamp(1.6rem,3vw,2.1rem); line-height:1.15; font-weight:500; letter-spacing:-.02em; }
+  h3 { font-size:1.08rem; font-weight:500; letter-spacing:-.01em; }
+  p { margin:0; }
+  a { color: inherit; }
+  .eyebrow { font-size:.7rem; font-weight:600; text-transform:uppercase; letter-spacing:.15em; color: var(--ink-mute); }
+  .eyebrow.acc { color: var(--accent); transition: color .6s cubic-bezier(.16,1,.3,1); }
+  .lede { font-size: clamp(1.02rem,1.7vw,1.15rem); color: var(--ink-soft); line-height:1.6; }
+  .sm { font-size:.875rem; } .xs { font-size:.76rem; }
+  .soft { color: var(--ink-soft); } .mute { color: var(--ink-mute); }
+  .mono { font-family:"IBM Plex Mono",ui-monospace,monospace; }
+  .stack { display:flex; flex-direction:column; }
+  .g6{gap:.375rem}.g10{gap:.625rem}.g16{gap:1rem}.g24{gap:1.5rem}.g40{gap:2.5rem}
+  section { padding-block: clamp(2.5rem,6vw,4.5rem); }
+
+  /* nav */
+  .nav { position:sticky; top:0; z-index:60; background: color-mix(in srgb, var(--ground) 84%, transparent);
+         backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+         border-bottom:1px solid var(--line-soft); }
+  .nav .wrap { display:flex; align-items:center; gap:1rem; padding-block:.85rem; }
+  .brand { font-weight:600; letter-spacing:-.02em; font-size:.98rem; text-decoration:none; }
+  .navlinks { display:flex; gap:.15rem; margin-left:auto; align-items:center; }
+  .navlinks a { text-decoration:none; font-size:.855rem; font-weight:500; color: var(--ink-mute);
+                padding:.45rem .7rem; border-radius:999px; transition:color .25s,background-color .25s; }
+  .navlinks a:hover { color: var(--ink); }
+  .navlinks a.on { color: var(--ink); background: var(--sunk); }
+  .btn { appearance:none; border:0; cursor:pointer; font:inherit; font-size:.855rem; font-weight:500;
+         padding:.55rem 1.15rem; border-radius:999px; background: var(--ink); color: var(--ground);
+         transition: transform .18s cubic-bezier(.16,1,.3,1), opacity .2s; text-decoration:none;
+         display:inline-flex; align-items:center; justify-content:center; gap:.4rem; }
+  .btn:hover { transform: scale(1.025); } .btn:active { transform: scale(.975); }
+  .btn.sec { background: var(--surface); color: var(--ink); border:1px solid var(--line); }
+  .btn.ghost { background:transparent; color: var(--ink-soft); }
+  .btn[disabled] { opacity:.38; cursor:not-allowed; transform:none; }
+  @media (max-width: 720px){ .navlinks a.hide-sm { display:none; } }
+
+  /* biome pills */
+  .pills { display:flex; gap:.2rem; padding:.26rem; border-radius:999px;
+           border:1px solid var(--line-soft); background: var(--surface); width:fit-content; flex-wrap:wrap;
+           box-shadow: var(--shadow); }
+  .pills button { appearance:none;border:0;cursor:pointer;font:inherit;font-size:.83rem;font-weight:500;
+                  padding:.42rem .95rem;border-radius:999px;background:transparent;color:var(--ink-mute);
+                  transition:color .3s,background-color .45s cubic-bezier(.16,1,.3,1); }
+  .pills button:hover{color:var(--ink)}
+  .pills button[aria-selected="true"]{ background: color-mix(in srgb, var(--accent) 13%, var(--surface)); color: var(--accent); }
+
+  /* vitrine + specimen frames */
+  .vitrine { position:relative; aspect-ratio:4/5; border-radius:26px; overflow:hidden;
+             border:1px solid var(--line-soft); box-shadow: var(--shadow);
+             background: radial-gradient(120% 120% at 30% 18%, var(--wash), transparent 62%),
+                         linear-gradient(158deg, color-mix(in srgb,var(--accent) 7%,var(--surface)), var(--sunk));
+             transition: background .8s cubic-bezier(.16,1,.3,1); }
+  .vitrine svg, .frame svg { position:absolute; inset:0; width:100%; height:100%; padding:9%; }
+  .vitrine .tag { position:absolute; left:1.1rem; bottom:1rem; font-size:.62rem; font-weight:600;
+                  letter-spacing:.16em; text-transform:uppercase; color:var(--accent); opacity:.85; }
+
+  .hero { display:grid; gap: clamp(1.75rem,4vw,3.5rem); align-items:center; }
+  @media (min-width:860px){ .hero { grid-template-columns:1.05fr .95fr; } }
+
+  .pill-badge { display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--line);
+                border-radius:999px;padding:.3rem .75rem;font-size:.78rem;color:var(--ink-soft);
+                background:var(--surface);width:fit-content; }
+  .dot { width:7px;height:7px;border-radius:50%;background:var(--ink-mute);flex:none; }
+  .dot.live { background:var(--ok); animation: breathe 3s ease-in-out infinite; }
+  @keyframes breathe { 0%,100%{transform:scale(1);box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 40%,transparent)}
+                       50%{transform:scale(1.18);box-shadow:0 0 12px 3px color-mix(in srgb,var(--ok) 25%,transparent)} }
+
+  /* grids */
+  .grid { display:grid; gap:1.15rem; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); }
+  .card { border:1px solid var(--line-soft); border-radius:20px; background:var(--surface);
+          overflow:hidden; text-align:left; cursor:pointer; appearance:none; padding:0; font:inherit;
+          color:inherit; transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s; display:flex; flex-direction:column; }
+  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .card .frame { position:relative; aspect-ratio:4/5;
+                 background: radial-gradient(120% 120% at 32% 20%, var(--cw), transparent 62%);
+                 border-bottom:1px solid var(--line-soft); }
+  .card .meta { padding:1rem 1.1rem 1.2rem; display:flex; flex-direction:column; gap:.3rem; }
+  .card .latin { font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-style:italic; color:var(--ink-mute); }
+
+  .jcard { display:block; text-decoration:none; border:1px solid var(--line-soft); border-radius:20px;
+           background:var(--surface); padding:1.35rem 1.45rem; transition:border-color .3s, transform .45s cubic-bezier(.16,1,.3,1); }
+  .jcard:hover { border-color: var(--line); transform: translateY(-3px); }
+
+  /* modal + drawer */
+  .scrim { position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center;
+           padding:1rem; background:rgba(0,0,0,.42); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+           animation: fade .3s ease both; }
+  @keyframes fade { from{opacity:0} to{opacity:1} }
+  .sheet { position:relative; z-index:2; width:100%; max-width:56rem; max-height:90vh; overflow-y:auto;
+           background:var(--surface); border:1px solid var(--line-soft); border-radius:26px;
+           display:grid; grid-template-columns:1fr; animation: rise .45s cubic-bezier(.16,1,.3,1) both; }
+  @media (min-width:760px){ .sheet { grid-template-columns:1fr 1fr; } }
+  @keyframes rise { from{opacity:0;transform:translateY(14px) scale(.985)} to{opacity:1;transform:none} }
+  .sheet .media { position:relative; min-height:260px;
+                  background: radial-gradient(120% 120% at 30% 20%, var(--cw), transparent 62%); }
+  .sheet .body { padding: clamp(1.4rem,3vw,2.4rem); display:flex; flex-direction:column; gap:1.1rem; }
+  .x { position:absolute; right:1rem; top:1rem; z-index:3; width:34px;height:34px;border-radius:50%;
+       border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); cursor:pointer;
+       font-size:1rem; line-height:1; display:grid; place-items:center; }
+
+  .specs { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1px;
+           background:var(--line-soft); border:1px solid var(--line-soft); border-radius:14px; overflow:hidden; }
+  .specs > div { background:var(--surface); padding:.75rem .9rem; }
+  .specs dt { font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute) }
+  .specs dd { margin:.22rem 0 0; font-size:.83rem; font-weight:500; }
+
+  .drawer { position:fixed; inset:0; z-index:110; display:flex; justify-content:flex-end;
+            background:rgba(0,0,0,.42); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+            animation: fade .3s ease both; }
+  .drawer .panel { position:relative; z-index:2; width:100%; max-width:27rem; height:100%; overflow-y:auto;
+                   background:var(--surface); border-left:1px solid var(--line-soft);
+                   padding: clamp(1.35rem,3vw,2rem); display:flex; flex-direction:column; gap:1.4rem;
+                   animation: slide .5s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes slide { from{transform:translateX(100%)} to{transform:none} }
+  .steps { display:flex; gap:.4rem; }
+  .steps i { height:3px; flex:1; border-radius:999px; background:var(--line); }
+  .steps i.on { background: var(--ink); }
+
+  /* forms */
+  label.f { display:flex; flex-direction:column; gap:.5rem; font-size:.875rem; font-weight:500; }
+  input[type=email], input[type=text], textarea, .chipbox {
+    width:100%; border:1px solid var(--line); border-radius:12px; padding:.7rem .8rem;
+    font:inherit; font-size:.875rem; font-weight:400; background:var(--surface); color:var(--ink); outline:none; }
+  input:focus, textarea:focus, .chipbox:focus-within { border-color: var(--ink-mute); }
+  .opt { display:flex; align-items:center; gap:.7rem; border:1px solid var(--line); border-radius:12px;
+         padding:.65rem .8rem; font-size:.875rem; font-weight:400; cursor:pointer; color:var(--ink-soft); }
+  .opt:has(:checked){ border-color: var(--ink); background: var(--sunk); color: var(--ink); }
+  .opt input { accent-color: var(--ink); }
+  .chipbox { display:flex; flex-wrap:wrap; gap:.45rem; align-items:center; min-height:3rem; cursor:text; }
+  .chip { display:inline-flex; align-items:center; gap:.4rem; background:var(--sunk); border-radius:9px;
+          padding:.25rem .4rem .25rem .6rem; font-size:.83rem; }
+  .chip button { border:0;background:none;cursor:pointer;color:var(--ink-mute);font-size:.9rem;line-height:1;padding:0 .15rem }
+  .chipbox input { border:0;padding:.25rem;flex:1;min-width:11rem;background:transparent;font-size:.875rem }
+
+  .alert { border-radius:12px; padding:.85rem 1rem; font-size:.85rem; line-height:1.5; }
+  .alert.bad { border:1px solid color-mix(in srgb,var(--stop) 34%,transparent);
+               background: color-mix(in srgb,var(--stop) 8%,transparent); }
+  .alert.neutral { border:1px solid var(--line-soft); background: var(--sunk); }
+
+  .note { border-left:2px solid var(--line); padding-left:1.05rem; font-size:.875rem;
+          color:var(--ink-soft); line-height:1.6; }
+  .demo-flag { border:1px dashed var(--line); border-radius:12px; padding:.7rem .9rem;
+               font-size:.76rem; color:var(--ink-mute); line-height:1.5; }
+  hr { border:0; height:1px; background:var(--line-soft); margin:0; }
+  footer { border-top:1px solid var(--line-soft); padding-block:2.2rem 3.2rem; }
+  [hidden] { display:none !important; }
+
+  /* ============ specimen animation ============ */
+  svg .lim { fill:none; stroke-width:1.25; stroke-linecap:round; stroke-linejoin:round; }
+  svg g, svg path, svg circle { transform-box: view-box; }
+  .hydro-body{animation:drift 11s ease-in-out infinite;transform-origin:100px 120px}
+  .hydro-caudal{animation:caudal 3.6s ease-in-out infinite;transform-origin:84px 120px}
+  .hydro-pect{animation:pect 2.1s ease-in-out infinite;transform-origin:124px 126px}
+  .hydro-dorsal{animation:finsway 6s ease-in-out infinite;transform-origin:106px 84px}
+  .hydro-anal{animation:finsway 6s ease-in-out infinite .3s;transform-origin:106px 156px}
+  @keyframes drift{0%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}68%{transform:translateY(5px)}}
+  @keyframes caudal{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+  @keyframes pect{0%,100%{transform:rotate(0)}50%{transform:rotate(14deg)}}
+  @keyframes finsway{0%,100%{transform:rotate(0)}50%{transform:rotate(-3.5deg)}}
+  .aeth-body{animation:sway 7s ease-in-out infinite;transform-origin:100px 196px}
+  .aeth-head{animation:headturn 9s ease-in-out infinite;transform-origin:100px 96px}
+  .aeth-wing{animation:wing 8s ease-in-out infinite;transform-origin:92px 112px}
+  .aeth-tail{animation:tailsway 7s ease-in-out infinite;transform-origin:100px 190px}
+  @keyframes sway{0%,100%{transform:rotate(0)}25%{transform:rotate(1.6deg)}75%{transform:rotate(-1.6deg)}}
+  @keyframes tailsway{0%,100%{transform:rotate(0)}25%{transform:rotate(3.5deg)}75%{transform:rotate(-3.5deg)}}
+  @keyframes headturn{0%,14%{transform:rotate(0)}24%,38%{transform:rotate(14deg)}47%,61%{transform:rotate(0)}71%,85%{transform:rotate(-11deg)}100%{transform:rotate(0)}}
+  @keyframes wing{0%,55%{transform:rotate(0)}65%{transform:rotate(-20deg)}75%,100%{transform:rotate(0)}}
+  .micro-all{animation:petalsway 12s ease-in-out infinite;transform-origin:100px 200px}
+  .micro-head{animation:track 12s ease-in-out infinite;transform-origin:100px 122px}
+  .micro-armL{animation:strikeL 12s ease-out infinite;transform-origin:94px 128px}
+  .micro-armR{animation:strikeR 12s ease-out infinite;transform-origin:109px 128px}
+  @keyframes petalsway{0%{transform:rotate(0)}8%{transform:rotate(2.4deg)}14%{transform:rotate(-1.4deg)}20%{transform:rotate(2deg)}28%,100%{transform:rotate(0)}}
+  @keyframes track{0%,40%{transform:rotate(0)}50%,66%{transform:rotate(16deg)}76%,100%{transform:rotate(0)}}
+  @keyframes strikeL{0%,55%{transform:rotate(0)}58.5%{transform:rotate(-26deg)}63%,100%{transform:rotate(0)}}
+  @keyframes strikeR{0%,55%{transform:rotate(0)}58.5%{transform:rotate(26deg)}63%,100%{transform:rotate(0)}}
+  .terra-coil{animation:respire 8.5s ease-in-out infinite;transform-origin:100px 155px}
+  .terra-head{animation:headrest 13s ease-in-out infinite;transform-origin:96px 152px}
+  .terra-tongue{animation:flick 13s linear infinite}
+  @keyframes respire{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+  @keyframes headrest{0%,42%{transform:rotate(0)}50%{transform:rotate(2.5deg)}58%,100%{transform:rotate(0)}}
+  @keyframes flick{0%,44%{opacity:0}46.5%{opacity:1}49%,52%{opacity:0}54.5%{opacity:1}57%,100%{opacity:0}}
+  .syl-body{animation:settle 6s ease-in-out infinite;transform-origin:100px 186px}
+  .syl-throat{animation:throat 1.5s ease-in-out infinite;transform-origin:100px 168px}
+  .syl-eyes{animation:blink 9s ease-in-out infinite;transform-origin:100px 136px}
+  @keyframes settle{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px) scaleY(1.012)}}
+  @keyframes throat{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.55) translateY(2px)}}
+  @keyframes blink{0%,72%{transform:scaleY(1)}75%{transform:scaleY(.08)}78%,100%{transform:scaleY(1)}}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  }
+</style>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="#/">Atelier Fauna</a>
+    <div class="navlinks">
+      <a href="#/collection" data-route="/collection">Viewing Room</a>
+      <a href="#/journal" data-route="/journal" class="hide-sm">Journal</a>
+      <a href="#/custodianship" data-route="/custodianship" class="hide-sm">Custodianship</a>
+      <a href="#/register" data-route="/register">Register</a>
+      <button class="btn" onclick="openDrawer()">Concierge</button>
+    </div>
+  </div>
+</nav>
+
+<main id="app"></main>
+
+<footer class="wrap">
+  <p class="xs mute">Atelier Fauna — demonstration build. No inquiry submitted here is
+    transmitted or stored; species screening runs locally in your browser. Live reptile
+    and insect sales carry state-level regulatory obligations that must be verified per
+    species and per destination before any real transaction.</p>
+</footer>
+
+<div id="modal"></div>
+<div id="drawer"></div>
+
+<script>
+/* ---------------- data ---------------- */
+const BIOMES = {
+  hydro:{name:"Hydro",latin:"Regnum Aquaticum",tag:"Abyssal Equilibrium & Fluid Motion",wash:"75,139,166"},
+  aether:{name:"Aether",latin:"Regnum Avium",tag:"Weightless Resonances & Sky Lineages",wash:"116,132,154"},
+  micro:{name:"Micro",latin:"Regnum Insectorum",tag:"Sculptural Stillness & Metamorphosis",wash:"169,141,87"},
+  terra:{name:"Terra",latin:"Regnum Reptilia",tag:"Ancient Grounding & Thermal Poise",wash:"176,113,75"},
+  sylvan:{name:"Sylvan",latin:"Regnum Silvestre",tag:"Canopy Density & Primeval Flora",wash:"85,131,100"},
+};
+const ORDER = ["hydro","aether","micro","terra","sylvan"];
+
+const STATUS = {
+  available:{label:"Available for placement",live:true},
+  waitlist:{label:"In sanctuary lineage · waitlist",live:false},
+  sanctuary_only:{label:"Sanctuary only · not placeable",live:false},
+};
+
+const SPECIMENS = [
+  { id:"hydro-altum", biome:"hydro", name:"Orinoco Altum Angelfish", latin:"Pterophyllum altum",
+    aura:"The Dignity of Buoyancy", status:"available", price:110,
+    short:"Towering lateral symmetry that drifts through zero-current waters.",
+    narrative:"The Altum commands space without friction. Observing its slow vertical drift trains the human nervous system to abandon hurry.",
+    temperament:["Contemplative","Fluid","Serene"], behaviour:"Slow vertical drift; fin undulation; independent pectoral flutter.",
+    specs:[["Custodianship","Mindful"],["Space","120 gal vertical biotope"],["Temperature","28–30 °C"],["Humidity","100% submerged"],["Light","Low diffused"],["Lifespan","10–12 years"]],
+    journal:"the-art-of-non-resistance" },
+  { id:"aether-lorikeet", biome:"aether", name:"Rainbow Lorikeet", latin:"Trichoglossus moluccanus",
+    aura:"Weightless Colour in Motion", status:"sanctuary_only", price:0,
+    short:"A spectrum given wings — never still, never frantic.",
+    narrative:"Its motion is constant but never chaotic — proof that energy and calm are not opposites.",
+    temperament:["Expressive","Social","Bright"], behaviour:"Perch sway; periodic alert head-turn; occasional wing settle.",
+    specs:[["Custodianship","Master custodian"],["Space","Walk-in aviary, 3 m span"],["Temperature","20–28 °C"],["Humidity","50–65%"],["Light","Natural diurnal"],["Lifespan","20–30 years"]],
+    journal:"constant-motion-without-chaos" },
+  { id:"micro-mantis", biome:"micro", name:"Pink Orchid Mantis", latin:"Hymenopus coronatus",
+    aura:"The Architecture of Disguise", status:"waitlist", price:85,
+    short:"Living flora mimicry that turns patience into supreme art.",
+    narrative:"Motionless for hours, it moves only when the wind stirs surrounding leaves. It teaches that not every moment requires a human reaction.",
+    temperament:["Hyper-Focused","Delicate","Solitary"], behaviour:"Near-total stillness; petal-mimic wind sway; one fast strike-fold.",
+    specs:[["Custodianship","Intermediate"],["Space","20×20×30 cm vivarium"],["Temperature","25–28 °C"],["Humidity","70–85%"],["Light","Low diffused"],["Lifespan","8–12 months"]],
+    journal:"the-four-second-pause" },
+  { id:"terra-boa", biome:"terra", name:"Amazon Emerald Tree Boa", latin:"Corallus caninus",
+    aura:"Coiled Thermal Balance", status:"available", price:495,
+    short:"Sculptural emerald coils draped across ancient mahogany branches.",
+    narrative:"A masterclass in quiet presence. It exists in equilibrium, breathing with slow deliberate intervals that soothe overstimulated environments.",
+    temperament:["Solitary","Poised","Observant"], behaviour:"Slow respiratory expansion of the coil; periodic tongue flick.",
+    specs:[["Custodianship","Master custodian"],["Space","90×60×120 cm arboreal"],["Temperature","26–31 °C gradient"],["Humidity","75–90%"],["Light","Natural diurnal"],["Lifespan","15–20 years"]],
+    journal:"thermal-centering" },
+  { id:"sylvan-mantella", biome:"sylvan", name:"Golden Mantella", latin:"Mantella aurantiaca",
+    aura:"A Small Fire in Green Shade", status:"sanctuary_only", price:0,
+    short:"An ember-bright amphibian moving through the density of the forest floor.",
+    narrative:"Its colour is not aggression — it is confidence, unhidden and unapologetic, against a canopy that asks everything to blend in.",
+    temperament:["Bright","Grounded","Alert"], behaviour:"Continuous throat pulse; whole-body settle; rare blink.",
+    specs:[["Custodianship","Not placeable"],["Status","IUCN Critically Endangered"],["Trade","CITES Appendix II"],["Export","Suspended since 2010"],["Space","45×45×60 cm paludarium"],["Lifespan","6–8 years"]],
+    note:"Overcollection for the pet trade is a named driver of this species' decline. Displayed for education only; it cannot be requested.",
+    journal:"visible-without-apology" },
+];
+
+const JOURNAL = [
+  { slug:"the-art-of-non-resistance", biome:"hydro", read:4,
+    title:"The Dignity of Buoyancy — What Deep Waters Teach About Anxiety",
+    dek:"Emotional decompression & nervous system regulation.",
+    insight:"When current meets mass, resistance creates drag. True grace yields to the flow.",
+    body:["In the vertical calm of the Orinoco tributary, the Altum does not battle current; it adjusts its internal air bladder by micro-fractions to find equilibrium.",
+          "Human anxiety is often the exhausting act of tensing against inevitable drift. By constructing living aquatic biotopes in domestic spaces, we introduce a steady visual cadence that measurably lowers arousal."] },
+  { slug:"constant-motion-without-chaos", biome:"aether", read:4,
+    title:"Constant Motion Without Chaos", dek:"Why sustained energy and calm aren't opposites.",
+    insight:"Sustained energy is not the enemy of calm — erratic energy is.",
+    body:["The lorikeet is rarely still, yet it is never frantic. Its motion has a rhythm — feeding, calling, wheeling through the canopy — that repeats rather than escalates.",
+          "Modern busyness is often mistaken for productivity because both look like motion. The distinction that matters is whether the motion has a rhythm you could sustain indefinitely, or whether it is accelerating toward a crash."] },
+  { slug:"the-four-second-pause", biome:"micro", read:5,
+    title:"The Four-Second Pause — The Geometry of Orchid Mantis Stillness",
+    dek:"Strategic patience and breaking reaction addiction.",
+    insight:"Patience is not inactive waiting; it is calibrated readiness without anxiety.",
+    body:["The modern digital cortex is trained to respond to stimuli in under 200 milliseconds. The Orchid Mantis, perched upon white petals, exists in extended stretches of unbroken contemplation.",
+          "It moves only when intentional movement guarantees success. Adopting the ‘Mantis Pause’ — four deliberate breaths before replying to any high-stakes inquiry — restores executive autonomy to the mind."] },
+  { slug:"thermal-centering", biome:"terra", read:6,
+    title:"Thermal Anchoring — Maintaining Core Equilibrium in Cold Environments",
+    dek:"Boundary setting and protecting emotional bandwidth.",
+    insight:"External noise cannot penetrate an internal system anchored in self-awareness.",
+    body:["Cold-blooded creatures do not generate internal warmth through chaotic metabolism; they position themselves deliberately beneath direct thermal rays. They do not allow their environment to dictate their inner energy.",
+          "In human relationships, thermal anchoring is the conscious decision to choose calm over absorbed drama — to find your own gradient rather than matching the temperature of whatever room you are in."] },
+  { slug:"visible-without-apology", biome:"sylvan", read:4,
+    title:"Visible Without Apology",
+    dek:"Confidence and camouflage are both valid strategies — but they are not the same one.",
+    insight:"Standing out is not the same as being unsafe. Choose deliberately.",
+    body:["Against a forest floor built for concealment, the Golden Mantella does the opposite of blend in. Its colour is a declared fact, not a mistake it is trying to correct.",
+          "Most of us default to camouflage because it feels safer, without checking whether it is actually the right strategy for the moment we are in. Sometimes the mantella's answer — be unmistakably visible — is the one that works."] },
+];
+
+/* Same reject-only screening rules as the server. Ported verbatim in intent:
+   there is no "approved" verdict and there never will be — this can say
+   "definitely prohibited", never "legal". */
+const EXCLUSIONS = [
+  { re:[/\bclarias\b/i,/\bclariidae\b/i,/walking\s+catfish/i],
+    reason:"The entire Clariidae family (walking catfish) is listed as US injurious wildlife. Live specimens and viable eggs are prohibited from import, with no permit pathway for the pet trade.",
+    authority:"USFWS — Lacey Act, 50 CFR Part 16" },
+  { re:[/\bchanna\b/i,/\bparachanna\b/i,/\bsnakehead\b/i],
+    reason:"Snakehead species (Channa and Parachanna, 34 listed species) are US injurious wildlife. Live specimens and viable eggs are prohibited from import.",
+    authority:"USFWS — Lacey Act, 50 CFR Part 16" },
+  { re:[/\bhippocampus\b/i,/\bseahorse/i,/\bpipefish/i,/\bsyngnathid/i],
+    reason:"Seahorses and pipefish are Schedule I protected under India's Wild Life (Protection) Act; capture and trade are banned. Also CITES-listed.",
+    authority:"India WLPA 1972 (Schedule I) · CITES Appendix II" },
+  { re:[/\bmantella\b/i],
+    reason:"Mantella species are CITES Appendix II listed. Mantella aurantiaca is IUCN Critically Endangered with an area of occupancy under 10 km², an annual export quota in the low hundreds, and export suspended since 2010. Overcollection for the pet trade is a named driver of its decline.",
+    authority:"CITES Appendix II · IUCN Red List (Critically Endangered)" },
+  { re:[/\bpoecilotheria\b/i],
+    reason:"All Poecilotheria species are CITES Appendix II listed, requiring permits for international trade.",
+    authority:"CITES Appendix II (2019)" },
+  { re:[/\bpython\b/i,/\bboa\s+constrictor\b/i,/\beunectes\b/i,/\banaconda\b/i],
+    reason:"Several large constrictor species are US injurious wildlife with prohibited interstate transport. This match is broad and may catch permitted species — flagged for human review rather than silently allowed.",
+    authority:"USFWS — Lacey Act, 50 CFR 16.15" },
+];
+function screen(input){
+  const t = input.trim();
+  for (const r of EXCLUSIONS) if (r.re.some(p=>p.test(t)))
+    return { input:t, verdict:"excluded", reason:r.reason, authority:r.authority };
+  return { input:t, verdict:"needs_review" };
+}
+
+/* ---------------- specimen art ---------------- */
+const ART = {
+  hydro:`<g class="lim" stroke="var(--accent)"><g class="hydro-body">
+    <path class="hydro-dorsal" d="M96 84 C104 56 116 34 134 18 C130 42 122 66 116 88"/>
+    <path class="hydro-anal" d="M96 156 C104 184 116 206 134 222 C130 198 122 174 116 152"/>
+    <path d="M150 120 C142 104 126 88 106 82 C92 92 84 106 84 120 C84 134 92 148 106 158 C126 152 142 136 150 120 Z"/>
+    <path d="M112 158 C114 182 112 202 106 220"/>
+    <path class="hydro-caudal" d="M84 120 C70 108 58 102 48 100 C54 112 54 128 48 140 C58 138 70 132 84 120 Z"/>
+    <path class="hydro-pect" d="M124 126 C132 132 136 142 133 150"/>
+    <path d="M150 120 C146 116 142 114 138 114" opacity=".6"/>
+    <circle cx="136" cy="112" r="2.6" fill="var(--accent)" stroke="none"/>
+    <path d="M124 92 C120 110 120 132 124 150" opacity=".32"/>
+    <path d="M108 84 C104 106 104 136 108 158" opacity=".32"/></g></g>`,
+  aether:`<g class="lim" stroke="var(--accent)"><path d="M40 196 L160 196" opacity=".5"/><g class="aeth-body">
+    <path d="M100 96 C122 96 134 122 132 150 C130 176 116 192 100 192 C84 192 70 176 68 150 C66 122 78 96 100 96 Z"/>
+    <g class="aeth-head"><circle cx="100" cy="76" r="21"/>
+      <path d="M118 70 C128 72 132 78 128 84 C124 88 118 86 116 82"/>
+      <circle cx="108" cy="70" r="2.4" fill="var(--accent)" stroke="none"/></g>
+    <path class="aeth-wing" d="M92 112 C74 122 66 146 72 168 C80 162 88 146 92 128"/>
+    <path class="aeth-tail" d="M100 190 C104 208 106 222 104 234"/>
+    <path d="M94 192 L92 197 M106 192 L108 197"/></g></g>`,
+  micro:`<g class="lim micro-all" stroke="var(--accent)">
+    <path d="M100 200 L100 232" opacity=".5"/>
+    <path d="M100 200 C88 190 84 172 90 158 C96 146 108 146 113 158 C119 172 114 190 100 200 Z"/>
+    <path d="M100 156 L100 122"/>
+    <path d="M90 176 C74 178 64 170 66 158 C76 154 88 162 90 172"/>
+    <path d="M113 176 C129 178 139 170 137 158 C127 154 115 162 113 172"/>
+    <path d="M92 150 C78 148 70 138 74 128 C84 128 92 138 93 146"/>
+    <path d="M111 150 C125 148 133 138 129 128 C119 128 111 138 110 146"/>
+    <g class="micro-head"><path d="M100 122 C93 122 89 116 91 110 C95 105 105 105 109 110 C111 116 107 122 100 122 Z"/>
+      <circle cx="94" cy="111" r="1.9" fill="var(--accent)" stroke="none"/>
+      <circle cx="106" cy="111" r="1.9" fill="var(--accent)" stroke="none"/>
+      <path d="M95 105 C92 96 90 90 91 84 M105 105 C108 96 110 90 109 84"/></g>
+    <path class="micro-armL" d="M94 128 C84 132 78 142 80 152"/>
+    <path class="micro-armR" d="M109 128 C119 132 125 142 123 152"/></g>`,
+  terra:`<g class="lim" stroke="var(--accent)">
+    <path d="M22 116 C74 106 128 106 180 116" opacity=".45" stroke-width="2"/>
+    <g class="terra-coil">
+      <path d="M70 112 C50 140 54 178 80 186 C106 194 120 168 106 146" opacity=".55"/>
+      <path d="M100 110 C80 140 84 180 110 187 C136 194 149 166 134 144" opacity=".75"/>
+      <path d="M130 112 C114 138 118 172 140 178" opacity=".55"/>
+      <g class="terra-head"><path d="M96 152 C110 144 128 145 138 154 C128 163 110 163 96 158 Z"/>
+        <circle cx="127" cy="151" r="2.3" fill="var(--accent)" stroke="none"/>
+        <path class="terra-tongue" d="M138 155 L150 155 M150 155 L156 151 M150 155 L156 159"/></g></g></g>`,
+  sylvan:`<g class="lim" stroke="var(--accent)">
+    <path d="M34 186 C70 180 130 180 166 186" opacity=".45"/>
+    <g class="syl-body">
+      <path d="M100 122 C126 122 142 146 142 164 C142 178 128 186 100 186 C72 186 58 178 58 164 C58 146 74 122 100 122 Z"/>
+      <path class="syl-throat" d="M84 168 C92 176 108 176 116 168"/>
+      <circle cx="82" cy="136" r="7"/><circle cx="118" cy="136" r="7"/>
+      <g class="syl-eyes"><circle cx="82" cy="136" r="3" fill="var(--accent)" stroke="none"/>
+        <circle cx="118" cy="136" r="3" fill="var(--accent)" stroke="none"/></g>
+      <path d="M70 178 C64 184 60 190 62 194 M130 178 C136 184 140 190 138 194"/>
+      <path d="M138 168 C150 170 156 180 152 190"/></g></g>`,
+};
+const svgFor = b => `<svg viewBox="0 0 200 240" role="img" aria-label="${BIOMES[b].name} specimen">${ART[b]}</svg>`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function badge(status){
+  const s = STATUS[status];
+  return `<span class="pill-badge"><span class="dot${s.live?" live":""}"></span>${s.label}</span>`;
+}
+function setAccent(b){
+  document.documentElement.style.setProperty("--accent", `var(--${b})`);
+  document.documentElement.style.setProperty("--wash", `rgba(${BIOMES[b].wash},.12)`);
+}
+
+/* ---------------- pages ---------------- */
+let heroBiome = "hydro";
+
+function pageHome(){
+  const sp = SPECIMENS.find(s=>s.biome===heroBiome);
+  const b = BIOMES[heroBiome];
+  setAccent(heroBiome);
+  return `
+  <section class="wrap">
+    <div class="hero">
+      <div class="stack g24">
+        <span class="eyebrow acc">${b.latin} · ${b.tag}</span>
+        <h1>${sp.aura}</h1>
+        <p class="lede">${sp.short}</p>
+        ${badge(sp.status)}
+        <div class="pills" role="tablist" aria-label="Select exhibit">
+          ${ORDER.map(k=>`<button role="tab" aria-selected="${k===heroBiome}" onclick="pickBiome('${k}')">${BIOMES[k].name}</button>`).join("")}
+        </div>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+          <button class="btn" onclick="openSpecimen('${sp.id}')">Enter the dossier</button>
+          ${sp.status==="sanctuary_only"
+            ? `<a class="btn sec" href="#/custodianship">Why this one isn’t for sale</a>`
+            : `<button class="btn sec" onclick="openDrawer('${sp.id}')">Begin custodianship inquest</button>`}
+        </div>
+      </div>
+      <div class="vitrine">${svgFor(heroBiome)}<span class="tag">${b.name} specimen</span></div>
+    </div>
+  </section>
+  <hr>
+  <section class="wrap stack g24">
+    <div class="stack g10 narrow">
+      <span class="eyebrow">The collection</span>
+      <h2>One animal per exhibit</h2>
+      <p class="lede">Five exhibits, five animals. Each carries real care specifications, its own
+        Sanctuary Journal essay, and a behavioural loop built from how that species actually rests.</p>
+    </div>
+    ${gridOfSpecimens()}
+    <p><a class="btn sec" href="#/collection">Open the Viewing Room</a></p>
+  </section>
+  <hr>
+  <section class="wrap stack g24">
+    <div class="stack g10 narrow">
+      <span class="eyebrow">The Sanctuary Journal</span>
+      <h2>What living biotopes teach about a considered life</h2>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
+      ${JOURNAL.slice(0,4).map(journalCard).join("")}
+    </div>
+    <p><a class="btn sec" href="#/journal">Read the Journal</a></p>
+  </section>`;
+}
+
+function gridOfSpecimens(){
+  return `<div class="grid">${SPECIMENS.map(s=>`
+    <button class="card" style="--cw:rgba(${BIOMES[s.biome].wash},.13)" onclick="openSpecimen('${s.id}')">
+      <div class="frame" style="--accent:var(--${s.biome})">${svgFor(s.biome)}</div>
+      <div class="meta">
+        <span class="eyebrow" style="color:var(--${s.biome})">${BIOMES[s.biome].name}</span>
+        <h3>${s.name}</h3>
+        <span class="latin">${s.latin}</span>
+        <p class="sm soft" style="margin-top:.25rem">${s.short}</p>
+        <div style="margin-top:.4rem">${badge(s.status)}</div>
+      </div>
+    </button>`).join("")}</div>`;
+}
+
+function pageCollection(){
+  const placeable = SPECIMENS.filter(s=>s.status!=="sanctuary_only").length;
+  return `<section class="wrap stack g24">
+    <div class="stack g10 narrow">
+      <span class="eyebrow">The Viewing Room</span>
+      <h1>The whole collection</h1>
+      <p class="lede">Every specimen across all five exhibits. Select any one for its full dossier —
+        care specifications, temperament, and the Journal essay drawn from how it lives.</p>
+      <p class="sm mute">${SPECIMENS.length} specimens · ${placeable} available for custodianship ·
+        ${SPECIMENS.length-placeable} display and education only</p>
+    </div>
+    ${gridOfSpecimens()}
+  </section>`;
+}
+
+const journalCard = a => `
+  <a class="jcard" href="#/journal/${a.slug}">
+    <span class="eyebrow" style="color:var(--${a.biome})">${BIOMES[a.biome].name} · ${a.read} min read</span>
+    <h3 style="margin-top:.6rem">${a.title}</h3>
+    <p class="sm soft" style="margin-top:.4rem">${a.dek}</p>
+    <p class="mono xs mute" style="margin-top:.8rem">“${a.insight}”</p>
+  </a>`;
+
+function pageJournal(){
+  return `<section class="wrap stack g24">
+    <div class="stack g10 narrow">
+      <span class="eyebrow">The Sanctuary Journal</span>
+      <h1>What the natural world teaches about a considered life</h1>
+      <p class="lede">Every essay pairs an observed behaviour in one of our exhibits with a
+        practice for the nervous system.</p>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
+      ${JOURNAL.map(journalCard).join("")}
+    </div>
+  </section>`;
+}
+
+function pageArticle(slug){
+  const a = JOURNAL.find(x=>x.slug===slug);
+  if(!a) return pageJournal();
+  setAccent(a.biome);
+  return `<section class="wrap" style="max-width:44rem">
+    <a class="sm mute" href="#/journal" style="text-decoration:none">← The Sanctuary Journal</a>
+    <span class="eyebrow acc" style="display:block;margin-top:2rem">${BIOMES[a.biome].name} · ${a.read} min read</span>
+    <h1 style="margin-top:.7rem;font-size:clamp(1.9rem,4.4vw,2.8rem)">${a.title}</h1>
+    <p class="lede" style="margin-top:1rem">${a.dek}</p>
+    <div class="stack g16" style="margin-top:2.2rem">
+      ${a.body.map(p=>`<p class="soft">${p}</p>`).join("")}
+    </div>
+    <blockquote class="note mono" style="margin:2.2rem 0 0;font-style:italic">${a.insight}</blockquote>
+  </section>`;
+}
+
+function pageCustodianship(){
+  const P = [
+    ["Captive-bred provenance only","Every specimen traces to a documented captive-breeding programme. We do not source wild-caught specimens, and provenance documentation is provided at consultation, not withheld."],
+    ["No instant acquisition","There is no cart and no checkout. Every placement begins with a private consultation, because a living creature is not an impulse purchase."],
+    ["Habitat before animal","We verify enclosure, climate control and diet logistics are ready before placement. If your space isn’t ready we say so, and help you build toward it rather than compromise welfare."],
+    ["Species-appropriate boundaries","Some species we display for education only and never place. Regulatory status, welfare complexity and lifespan all factor into what is available at all — the Golden Mantella in this collection is one such case."],
+    ["An ongoing relationship","After placement, custodians keep access to our Biotope Architects for husbandry, health and enclosure questions — for the life of the animal, not the length of the transaction."],
+  ];
+  return `<section class="wrap stack g24">
+    <div class="stack g10 narrow">
+      <span class="eyebrow">Ethical care charter</span>
+      <h1>Custodianship, not ownership</h1>
+      <p class="lede">Atelier Fauna exists on the premise that a living specimen deserves more
+        friction than a product, and more commitment than a purchase.</p>
+    </div>
+    <div class="stack g24 narrow">
+      ${P.map((p,i)=>`<div style="display:flex;gap:1.1rem">
+        <span class="mono xs mute" style="padding-top:.3rem">${String(i+1).padStart(2,"0")}</span>
+        <div><h3>${p[0]}</h3><p class="soft sm" style="margin-top:.4rem">${p[1]}</p></div>
+      </div>`).join("")}
+    </div>
+  </section>`;
+}
+
+/* ---------- Register ---------- */
+let reg = { species:[], result:null };
+function pageRegister(){
+  if (reg.result) return registerResult();
+  return `<section class="wrap stack g24">
+    <div class="stack g10 narrow">
+      <span class="eyebrow">The Register</span>
+      <h1>Tell us what you’d like to see</h1>
+      <p class="lede">The collection grows from what custodians actually ask for. Submit the
+        species you’re interested in and we’ll research what can be responsibly and lawfully offered.</p>
+    </div>
+    <div class="stack g16 narrow">
+      <label class="f">Which species would you like to see?
+        <div class="chipbox" id="chipbox" onclick="document.getElementById('sp').focus()">
+          ${reg.species.map(s=>`<span class="chip">${esc(s)}<button onclick="event.stopPropagation();rmSpecies('${esc(s).replace(/'/g,"\\'")}')" aria-label="Remove ${esc(s)}">×</button></span>`).join("")}
+          <input id="sp" placeholder="${reg.species.length?'Add another…':'e.g. Neon Tetra, Corydoras aeneus…'}"
+                 aria-label="Species name" onkeydown="spKey(event)" onblur="spBlur(this)">
+        </div>
+      </label>
+      <p class="xs mute">Press Enter or comma after each. Pasting a list splits it automatically. ${reg.species.length}/50 entries.</p>
+      <label class="f">Email<input type="email" id="em" placeholder="you@domain.com" oninput="syncReg()"></label>
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <button class="btn" id="regbtn" ${reg.species.length?"":"disabled"} onclick="submitRegister()">Submit register</button>
+        <span class="xs mute">This is a request, not an order. Nothing is reserved.</span>
+      </div>
+      <div class="demo-flag">Demonstration build — screening runs locally in your browser using the
+        same reject-only rules as the server. Nothing is transmitted or stored.</div>
+    </div>
+  </section>`;
+}
+function registerResult(){
+  const ex = reg.result.filter(r=>r.verdict==="excluded");
+  const rev = reg.result.filter(r=>r.verdict==="needs_review");
+  return `<section class="wrap stack g24">
+    <div class="stack g10 narrow">
+      <span class="eyebrow">Register received</span>
+      <h1 style="font-size:clamp(1.9rem,4vw,2.6rem)">${ex.length?"Some entries can’t be sourced":"Your list is with our researchers"}</h1>
+    </div>
+    <div class="stack g24 narrow">
+      ${ex.length?`<div class="stack g10">
+        <span class="eyebrow">Cannot be sourced — ${ex.length} ${ex.length===1?"entry":"entries"}</span>
+        ${ex.map(r=>`<div class="alert bad stack g6">
+          <strong>${esc(r.input)}</strong>
+          <span class="soft">${r.reason}</span>
+          <span class="mono xs mute">${r.authority}</span></div>`).join("")}
+      </div>`:""}
+      ${rev.length?`<div class="stack g10">
+        <span class="eyebrow">Passed to research — ${rev.length} ${rev.length===1?"entry":"entries"}</span>
+        <div class="alert neutral stack g10">
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap">${rev.map(r=>`<span class="chip">${esc(r.input)}</span>`).join("")}</div>
+          <span class="soft">No exclusion rule matched these. <strong>This is not a clearance</strong> — it means only
+            that our automated screen found no known prohibition. Whether any of them can lawfully be sourced,
+            kept, or shipped to you is determined per species and per jurisdiction, by a person, before anything is offered.</span>
+        </div>
+      </div>`:""}
+      <p class="note xs">Automated screening can only reject known-prohibited species. It never establishes
+        that a species is legal to import, keep, or sell. Our exclusion list covers taxa we have researched
+        directly — it is not exhaustive, and an entry passing it carries no assurance.</p>
+      <p><button class="btn sec" onclick="reg={species:[],result:null};render()">Submit another list</button></p>
+    </div>
+  </section>`;
+}
+function spCommit(raw, refocus = true){
+  const parts = String(raw).split(/[\n,]+/).map(s=>s.trim().slice(0,200)).filter(Boolean);
+  if(!parts.length) return false;
+  const seen = new Set(reg.species.map(s=>s.toLowerCase()));
+  for(const p of parts){ if(!seen.has(p.toLowerCase()) && reg.species.length<50){ reg.species.push(p); seen.add(p.toLowerCase()); } }
+  render(); if(refocus) setTimeout(()=>document.getElementById("sp")?.focus(),0);
+  return true;
+}
+/* Committing on blur must not re-render synchronously: render() replaces the
+   subtree containing the element currently firing the blur, which throws
+   ("node to be removed is no longer a child"). Defer past the event. */
+function spBlur(el){
+  const v = el.value;
+  if(!v.trim()) return;
+  el.value = "";
+  setTimeout(()=>spCommit(v, false), 0);
+}
+function spKey(e){
+  if(e.key==="Enter"||e.key===","){ e.preventDefault(); if(spCommit(e.target.value)) e.target.value=""; }
+  else if(e.key==="Backspace" && !e.target.value && reg.species.length){ reg.species.pop(); render(); setTimeout(()=>document.getElementById("sp")?.focus(),0); }
+}
+function rmSpecies(s){ reg.species = reg.species.filter(x=>x!==s); render(); }
+function syncReg(){}
+function submitRegister(){ reg.result = reg.species.map(screen); render(); window.scrollTo({top:0,behavior:"smooth"}); }
+
+/* ---------------- modal ---------------- */
+function openSpecimen(id){
+  const s = SPECIMENS.find(x=>x.id===id); if(!s) return;
+  const a = JOURNAL.find(j=>j.slug===s.journal);
+  document.getElementById("modal").innerHTML = `
+    <div class="scrim" onclick="if(event.target===this)closeModal()">
+      <div class="sheet" style="--accent:var(--${s.biome});--cw:rgba(${BIOMES[s.biome].wash},.14)" role="dialog" aria-modal="true" aria-label="${s.name}">
+        <button class="x" onclick="closeModal()" aria-label="Close">×</button>
+        <div class="media">${svgFor(s.biome)}</div>
+        <div class="body">
+          <div><span class="eyebrow acc">Anatomical &amp; biotope prerequisites</span>
+            <h2 style="margin-top:.55rem">${s.aura}</h2>
+            <p class="sm mute" style="margin-top:.3rem">${s.name} · <span class="mono" style="font-style:italic">${s.latin}</span></p></div>
+          ${badge(s.status)}
+          <p class="soft">${s.narrative}</p>
+          ${s.note?`<div class="alert bad sm">${s.note}</div>`:""}
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+            ${s.temperament.map(t=>`<span class="chip">${t}</span>`).join("")}</div>
+          <dl class="specs">${s.specs.map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
+          ${a?`<div style="border:1px solid var(--line-soft);border-radius:14px;padding:1rem 1.1rem;background:var(--sunk)">
+            <span class="eyebrow">Sanctuary Journal</span>
+            <a href="#/journal/${a.slug}" onclick="closeModal()" style="display:block;margin-top:.4rem;font-weight:500">${a.title}</a>
+            <span class="sm mute">${a.read} min read</span></div>`:""}
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+            ${s.status==="sanctuary_only"
+              ? `<span class="sm mute">Display and education only — this specimen cannot be placed.</span>`
+              : `<button class="btn" onclick="closeModal();openDrawer('${s.id}')">Begin custodianship inquest</button>`}
+            <button class="btn ghost" onclick="closeModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.body.style.overflow="hidden";
+}
+function closeModal(){ document.getElementById("modal").innerHTML=""; document.body.style.overflow=""; }
+
+/* ---------------- concierge drawer ---------------- */
+let dw = { open:false, step:0, id:null, space:"", checks:0, done:false };
+const SPACES = ["Under 20 gallon / small vivarium","20–90 gallon / medium enclosure","90+ gallon / large enclosure","Walk-in aviary or custom architectural build"];
+const CHECKS = ["I can commit to a consistent daily observation and care rhythm.",
+  "I understand this species’ full adult size and lifespan before acquiring it.",
+  "I have a plan for veterinary or specialist care access in my region.",
+  "I understand acquisition is a multi-year custodianship, not a purchase."];
+
+function openDrawer(id){ dw={open:true,step:0,id:id||null,space:"",checks:0,done:false}; drawDrawer(); }
+function closeDrawer(){ dw.open=false; document.getElementById("drawer").innerHTML=""; document.body.style.overflow=""; }
+function drawDrawer(){
+  if(!dw.open) return;
+  const s = dw.id ? SPECIMENS.find(x=>x.id===dw.id) : null;
+  let inner;
+  if (dw.done){
+    inner = `<div class="stack g16" style="text-align:center;padding-block:2rem">
+      <div style="font-size:1.8rem">✓</div>
+      <h2>Inquest received</h2>
+      <p class="soft sm">An Atelier Biotope Architect will reach out within two business days to
+        schedule your consultation. No acquisition is finalised until that conversation.</p>
+      <div class="demo-flag" style="text-align:left">Demonstration build — nothing was transmitted or stored.</div>
+    </div>`;
+  } else if (dw.step===0){
+    inner = `<div class="stack g16">
+      <div><span class="eyebrow">Step 1 of 3</span><h2 style="margin-top:.4rem">Habitat compatibility</h2>
+        ${s?`<p class="sm mute" style="margin-top:.4rem">Recommended for ${s.name}:
+          <strong style="color:var(--ink)">${s.specs.find(x=>x[0]==="Space")?.[1]||"—"}</strong></p>`:""}</div>
+      <div class="stack g10">${SPACES.map(o=>`<label class="opt"><input type="radio" name="sp2" ${dw.space===o?"checked":""}
+        onchange="dw.space=this.value;drawDrawer()" value="${o}">${o}</label>`).join("")}</div>
+      <button class="btn" style="align-self:flex-end" ${dw.space?"":"disabled"} onclick="dw.step=1;drawDrawer()">Continue</button>
+    </div>`;
+  } else if (dw.step===1){
+    inner = `<div class="stack g16">
+      <div><span class="eyebrow">Step 2 of 3</span><h2 style="margin-top:.4rem">Custodian readiness</h2></div>
+      <div class="stack g10">${CHECKS.map((c,i)=>`<label class="opt"><input type="checkbox"
+        onchange="dw.checks = this.checked ? dw.checks|(1<<${i}) : dw.checks&~(1<<${i}); drawDrawer()"
+        ${dw.checks&(1<<i)?"checked":""}>${c}</label>`).join("")}</div>
+      <div style="display:flex;justify-content:space-between">
+        <button class="btn ghost" onclick="dw.step=0;drawDrawer()">Back</button>
+        <button class="btn" ${dw.checks===15?"":"disabled"} onclick="dw.step=2;drawDrawer()">Continue</button></div>
+      <p class="xs mute">All four are required. The readiness checklist is enforced server-side in the
+        real build — a request that skips it is rejected, not saved as a lead.</p>
+    </div>`;
+  } else {
+    inner = `<div class="stack g16">
+      <div><span class="eyebrow">Step 3 of 3</span><h2 style="margin-top:.4rem">Private consultation</h2>
+        <p class="sm mute" style="margin-top:.4rem">This reserves a conversation — it is not a purchase or a deposit.</p></div>
+      <label class="f">Email<input type="email" id="dwem" placeholder="you@domain.com" oninput="drawEnable()"></label>
+      <div style="display:flex;justify-content:space-between">
+        <button class="btn ghost" onclick="dw.step=1;drawDrawer()">Back</button>
+        <button class="btn" id="dwsub" disabled onclick="dw.done=true;drawDrawer()">Submit inquest</button></div>
+    </div>`;
+  }
+  document.getElementById("drawer").innerHTML = `
+    <div class="drawer" onclick="if(event.target===this)closeDrawer()">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem">
+          <div><span class="eyebrow">Atelier Concierge</span>
+            <p class="sm mute" style="margin-top:.2rem">${s?s.name:"General inquest"}</p></div>
+          <button class="x" style="position:static" onclick="closeDrawer()" aria-label="Close">×</button>
+        </div>
+        <div class="steps">${[0,1,2].map(i=>`<i class="${i<=dw.step||dw.done?"on":""}"></i>`).join("")}</div>
+        ${inner}
+      </div>
+    </div>`;
+  document.body.style.overflow="hidden";
+}
+function drawEnable(){
+  const v = document.getElementById("dwem")?.value || "";
+  const b = document.getElementById("dwsub"); if(b) b.disabled = !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+}
+
+/* ---------------- router ---------------- */
+function pickBiome(b){ heroBiome=b; render(); }
+function route(){
+  const h = (location.hash||"#/").slice(1);
+  if (h.startsWith("/journal/")) return pageArticle(h.slice(9));
+  switch(h){
+    case "/collection": return pageCollection();
+    case "/journal": return pageJournal();
+    case "/custodianship": return pageCustodianship();
+    case "/register": return pageRegister();
+    default: return pageHome();
+  }
+}
+function render(){
+  const h = (location.hash||"#/").slice(1);
+  if (!h.startsWith("/journal/") && h !== "/") {
+    // Pages other than home have no biome context; keep the last chosen accent.
+  }
+  document.getElementById("app").innerHTML = route();
+  document.querySelectorAll(".navlinks a").forEach(a=>{
+    const r = a.getAttribute("data-route");
+    a.classList.toggle("on", r && h.startsWith(r));
+  });
+}
+addEventListener("hashchange", ()=>{ closeModal(); render(); window.scrollTo({top:0}); });
+addEventListener("keydown", e=>{ if(e.key==="Escape"){ closeModal(); closeDrawer(); } });
+render();
+</script>
