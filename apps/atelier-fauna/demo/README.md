@@ -1,11 +1,19 @@
-# Standalone demo page
+# Standalone demo pages
 
-`index.html` is a single self-contained page — no build step, no
-dependencies. Open it directly in a browser, or publish it anywhere that
-serves static files.
+Two self-contained pages — no build step, no dependencies. Open either
+directly in a browser, or publish anywhere that serves static files.
 
-Published version:
-https://claude.ai/code/artifact/c5e43db8-554a-462a-9a1d-2a30ed6f0c87
+| File | What it is | Published |
+|---|---|---|
+| `index.html` | The product demo — five exhibits, live animations, exhibit switcher | [link](https://claude.ai/code/artifact/c5e43db8-554a-462a-9a1d-2a30ed6f0c87) |
+| `economics.html` | The business case — sourced market research, pricing correction, unit economics | [link](https://claude.ai/code/artifact/739663d8-1e61-4326-9fb5-54e9fdf16dc9) |
+
+`index.html` links to the economics brief near the end. Show them in that
+order: what it is, then whether the numbers work.
+
+Every figure in `economics.html` traces to `../docs/MARKET-RESEARCH.md`,
+which carries the full sources. If a number changes there, change it in
+both.
 
 ## What it's for
 

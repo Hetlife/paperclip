@@ -5,3 +5,12 @@ node_modules/
 
 # Submitted inquiries — contains real email addresses, never commit
 .data/
+
+# The repo root .gitignore carries a broad `data/` rule (for Paperclip's own
+# runtime data dirs) which matches any directory named `data` at any depth —
+# including this app's src/data/, silently excluding the specimen and journal
+# content the app cannot build without. Re-include it here.
+# Un-ignoring the directory itself is required first: a file cannot be
+# re-included while a parent directory is still excluded.
+!src/data/
+!src/data/**

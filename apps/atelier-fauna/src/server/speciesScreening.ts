@@ -57,6 +57,12 @@ const HARD_EXCLUSIONS: ExclusionRule[] = [
     authority: "India WLPA 1972 (Schedule I) · CITES Appendix II",
   },
   {
+    patterns: [/\bmantella\b/i],
+    reason:
+      "Mantella species are CITES Appendix II listed. Mantella aurantiaca in particular is IUCN Critically Endangered with an area of occupancy under 10 km², carries an annual export quota in the low hundreds, and has had export suspended since 2010 pending non-detriment findings. Overcollection for the pet trade is a named driver of its decline.",
+    authority: "CITES Appendix II · IUCN Red List (Critically Endangered)",
+  },
+  {
     patterns: [/\bpoecilotheria\b/i],
     reason:
       "All Poecilotheria species are CITES Appendix II listed, requiring permits for international trade. Out of this collection's declared scope in any case.",

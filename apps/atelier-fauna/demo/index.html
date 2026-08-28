@@ -336,6 +336,7 @@
   <div class="wrap">
     <span class="wordmark">Atelier&nbsp;Fauna</span>
     <span class="mono">Working demo · 5 exhibits</span>
+
   </div>
 </header>
 
@@ -463,8 +464,10 @@
         <span class="what">Behavioural animation for all five exhibits<span>Hand-authored from each species’ real resting behaviour.</span></span></div>
       <div class="status-row"><span class="badge part">Partial</span>
         <span class="what">3D model rendering<span>The viewer loads a rigged .glb and loops its idle clip. No model exists yet — setting one field switches a specimen over.</span></span></div>
-      <div class="status-row"><span class="badge no">Not built</span>
-        <span class="what">Species research → publishable care specs<span>Every field needs a source and human sign-off. A wrong care spec is a welfare failure, not a content bug.</span></span></div>
+      <div class="status-row"><span class="badge built">Built</span>
+        <span class="what">The Viewing Room &amp; The Register<span>A gallery of the whole collection, and a buyer-facing form that submits a species list and screens it live.</span></span></div>
+      <div class="status-row"><span class="badge part">Partial</span>
+        <span class="what">Species research → publishable care specs<span>Market and legal research is done and sourced (see the economics brief). Care specs still need per-field sourcing and human sign-off — a wrong one is a welfare failure, not a content bug.</span></span></div>
       <div class="status-row"><span class="badge no">Not built</span>
         <span class="what">Reference imagery sourcing<span>A licensing problem before it is a technical one.</span></span></div>
       <div class="status-row"><span class="badge no">Not built</span>
@@ -474,6 +477,26 @@
     </div>
 
     <p class="note">Suggested next step: take one specimen — Hydro, the simplest body plan — source real photography by hand, run it through a generation service once, and drop the resulting <span class="mono">.glb</span> into the data file. That validates the whole receiving pipeline with zero new code, before deciding what is worth automating.</p>
+  </section>
+
+  <hr class="rule">
+
+  <section class="wrap stack g24">
+    <div class="stack g12 narrow">
+      <span class="eyebrow neutral">Before you decide anything</span>
+      <h2>The numbers live in a separate brief</h2>
+      <p class="lede">Market size, what these species actually retail for versus what the
+        original plan assumed, first-order unit economics, and the one species that had
+        to be pulled on conservation grounds. Every figure sourced; every assumption
+        labelled.</p>
+    </div>
+    <a href="https://claude.ai/code/artifact/739663d8-1e61-4326-9fb5-54e9fdf16dc9"
+       style="display:inline-flex;align-items:center;gap:.5rem;width:fit-content;
+              border:1px solid var(--hairline);border-radius:999px;padding:.6rem 1.2rem;
+              background:var(--surface);color:var(--ink);text-decoration:none;
+              font-size:.9rem;font-weight:500">
+      Open the economics brief →
+    </a>
   </section>
 </main>
 
@@ -570,8 +593,8 @@ const EX = {
     name: "Golden Mantella", latin: "Mantella aurantiaca",
     aura: "A Small Fire in Green Shade", eyebrow: "Regnum Silvestre · Canopy Density",
     lede: "An ember-bright amphibian moving through the density of the forest floor.",
-    status: "In sanctuary lineage · waitlist", beh: "Continuous throat pulse; whole-body settle; rare blink.",
-    specs: [["Custodianship","Intermediate"],["Space","45×45×60 cm paludarium"],["Temperature","22–26 °C"],["Humidity","80–100%"],["Light","Low diffused"],["Lifespan","6–8 years"]],
+    status: "Sanctuary only · not placeable", beh: "Continuous throat pulse; whole-body settle; rare blink.",
+    specs: [["Custodianship","Not placeable"],["Status","IUCN Critically Endangered"],["Trade","CITES Appendix II"],["Export","Suspended since 2010"],["Space","45×45×60 cm paludarium"],["Lifespan","6–8 years"]],
     svg: `<g class="lim" stroke="var(--accent)">
       <path d="M34 186 C70 180 130 180 166 186" opacity=".45"/>
       <g class="syl-body">

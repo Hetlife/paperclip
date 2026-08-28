@@ -1,0 +1,458 @@
+<title>Atelier Fauna Economics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #FAFAF9;
+    --surface: #FFFFFF;
+    --sunk: #F3F4F6;
+    --ink: #16181C;
+    --ink-soft: #4B515A;
+    --ink-mute: #767D87;
+    --line: rgba(16, 22, 32, .11);
+    --line-soft: rgba(16, 22, 32, .06);
+
+    /* categorical — validated light: CVD ΔE 16.1 protan, normal 23.9 */
+    --cat-researched: #1F7FA6;
+    --cat-assumed:    #C4703A;
+    /* diverging — validated light: CVD ΔE 15.9 protan. Red/blue, not
+       red/green: a red-green pair measured ΔE 5.4 deutan and would be
+       unreadable for a large share of viewers. */
+    --neg: #C2453A;
+    --pos: #2E6FA3;
+
+    --flag: #B4453C;
+    --flag-wash: rgba(180, 69, 60, .07);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0D0E10;
+      --surface: #16181B;
+      --sunk: #121417;
+      --ink: #EEF0F3;
+      --ink-soft: #AEB5BE;
+      --ink-mute: #7C848E;
+      --line: rgba(236, 240, 246, .14);
+      --line-soft: rgba(236, 240, 246, .07);
+      --cat-researched: #3F97BE;
+      --cat-assumed:    #C67840;
+      --neg: #E0685C;
+      --pos: #5C97CE;
+      --flag: #E2776C;
+      --flag-wash: rgba(226, 119, 108, .10);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0D0E10; --surface: #16181B; --sunk: #121417;
+    --ink: #EEF0F3; --ink-soft: #AEB5BE; --ink-mute: #7C848E;
+    --line: rgba(236, 240, 246, .14); --line-soft: rgba(236, 240, 246, .07);
+    --cat-researched: #3F97BE; --cat-assumed: #C67840;
+    --neg: #E0685C; --pos: #5C97CE;
+    --flag: #E2776C; --flag-wash: rgba(226, 119, 108, .10);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15.5px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 clamp(1.1rem, 4vw, 2.2rem); }
+  .narrow { max-width: 68ch; }
+
+  h1 { font-family: Fraunces, Georgia, serif; font-weight: 400;
+       font-size: clamp(2.1rem, 4.6vw, 3.1rem); line-height: 1.08;
+       letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+  h2 { font-size: clamp(1.15rem, 2.2vw, 1.4rem); font-weight: 600;
+       letter-spacing: -.012em; margin: 0; text-wrap: balance; }
+  h3 { font-size: .95rem; font-weight: 600; margin: 0; letter-spacing: -.005em; }
+  p  { margin: 0; }
+
+  .eyebrow { font-size: .66rem; font-weight: 600; text-transform: uppercase;
+             letter-spacing: .15em; color: var(--ink-mute); }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace;
+          font-variant-numeric: tabular-nums; }
+  .soft { color: var(--ink-soft); }
+  .mute { color: var(--ink-mute); }
+  .sm { font-size: .84rem; }
+  .xs { font-size: .75rem; }
+
+  .stack { display: flex; flex-direction: column; }
+  .g6{gap:.375rem} .g10{gap:.625rem} .g16{gap:1rem} .g24{gap:1.5rem} .g40{gap:2.5rem}
+
+  section { padding-block: clamp(2.2rem, 5vw, 3.4rem); }
+  hr { border: 0; height: 1px; background: var(--line-soft); margin: 0; }
+
+  header.top { border-bottom: 1px solid var(--line-soft); padding-block: 1.5rem 1.4rem; }
+  header.top .wrap { display: flex; justify-content: space-between;
+                     align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+
+  /* verdict banner */
+  .verdict {
+    border: 1px solid var(--line); border-left: 3px solid var(--flag);
+    background: var(--surface); border-radius: 12px;
+    padding: 1.15rem 1.35rem; display: flex; flex-direction: column; gap: .5rem;
+  }
+
+  /* stat tiles */
+  /* Six tiles: an explicit 3-up keeps two full rows. auto-fit produced a
+     five-wide row with one orphan cell. */
+  .tiles { display: grid; gap: 1px; background: var(--line-soft);
+           border: 1px solid var(--line-soft); border-radius: 12px; overflow: hidden;
+           grid-template-columns: 1fr; }
+  @media (min-width: 560px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 820px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
+  .tile { background: var(--surface); padding: 1rem 1.1rem; display: flex;
+          flex-direction: column; gap: .2rem; }
+  .tile .val { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums;
+               font-size: 1.5rem; font-weight: 500; letter-spacing: -.02em; line-height: 1.15; }
+  .tile .lbl { font-size: .78rem; color: var(--ink-soft); line-height: 1.4; }
+  .tile .src { font-size: .66rem; color: var(--ink-mute); margin-top: .15rem; }
+
+  /* charts */
+  figure { margin: 0; border: 1px solid var(--line-soft); border-radius: 12px;
+           background: var(--surface); overflow: hidden; }
+  figcaption { padding: 1.05rem 1.25rem .35rem; display: flex; flex-direction: column; gap: .3rem; }
+  .chart { padding: .6rem 1.25rem 1.25rem; }
+
+  .legend { display: flex; gap: 1.1rem; flex-wrap: wrap; padding: .1rem 1.25rem .8rem; }
+  .legend span { display: inline-flex; align-items: center; gap: .42rem;
+                 font-size: .78rem; color: var(--ink-soft); }
+  .swatch { width: 11px; height: 11px; border-radius: 3px; flex: none; }
+
+  .row { display: grid; grid-template-columns: 116px 1fr; gap: .85rem;
+         align-items: center; padding: .42rem 0; }
+  .row .name { font-size: .8rem; color: var(--ink-soft); line-height: 1.25; }
+  .row .name em { display: block; font-style: normal; font-size: .68rem; color: var(--ink-mute); }
+  .track { position: relative; height: 22px; }
+  .bar { position: absolute; top: 3px; height: 16px; border-radius: 0 4px 4px 0;
+         transition: filter .18s; }
+  .bar:hover { filter: brightness(1.08); }
+  .bar .tip { position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
+              margin-left: .5rem; font-family: "IBM Plex Mono", monospace;
+              font-variant-numeric: tabular-nums; font-size: .76rem;
+              font-weight: 500; color: var(--ink); white-space: nowrap; }
+  /* A near-full-width bar has no room for an outside label — it clipped at
+     the container edge. Move it inside the bar instead. */
+  .bar .tip.inside { left: auto; right: .5rem; margin-left: 0; color: #fff; }
+
+  /* diverging */
+  .zero { position: absolute; top: -2px; bottom: -2px; width: 1px;
+          background: var(--line); }
+  .zero-lbl { position: absolute; top: 100%; transform: translateX(-50%);
+              font-size: .66rem; color: var(--ink-mute); padding-top: .3rem; }
+  .bar.left { border-radius: 4px 0 0 4px; }
+  .bar.left .tip { left: auto; right: 100%; margin-left: 0; margin-right: .5rem; }
+
+  details { border-top: 1px solid var(--line-soft); }
+  details summary { padding: .7rem 1.25rem; font-size: .78rem; color: var(--ink-mute);
+                    cursor: pointer; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary:hover { color: var(--ink-soft); }
+  details[open] summary { color: var(--ink-soft); }
+  .tbl-scroll { overflow-x: auto; padding: 0 1.25rem 1.1rem; }
+  table { border-collapse: collapse; width: 100%; font-size: .8rem; }
+  th, td { text-align: right; padding: .42rem .7rem; border-top: 1px solid var(--line-soft);
+           white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { font-weight: 600; font-size: .7rem; text-transform: uppercase;
+       letter-spacing: .07em; color: var(--ink-mute); }
+  td.num { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+
+  .cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .card { border: 1px solid var(--line-soft); border-radius: 12px; background: var(--surface);
+          padding: 1.1rem 1.25rem; display: flex; flex-direction: column; gap: .45rem; }
+  .card p { font-size: .85rem; color: var(--ink-soft); line-height: 1.55; }
+
+  .note { border-left: 2px solid var(--line); padding-left: 1.05rem;
+          font-size: .88rem; color: var(--ink-soft); line-height: 1.6; }
+
+  ul.plain { margin: 0; padding-left: 1.15rem; display: flex; flex-direction: column; gap: .55rem; }
+  ul.plain li { font-size: .88rem; color: var(--ink-soft); line-height: 1.55; }
+  ul.plain li b { color: var(--ink); font-weight: 600; }
+
+  footer { border-top: 1px solid var(--line-soft); padding-block: 2rem 3rem; }
+  a { color: inherit; }
+  @media (prefers-reduced-motion: reduce) { * { transition-duration: .001ms !important; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <strong style="font-family:Fraunces,Georgia,serif;font-weight:400;font-size:1.05rem">Atelier&nbsp;Fauna</strong>
+    <span class="mono xs mute">Market research · 28 Aug 2026</span>
+  </div>
+</header>
+
+<main>
+  <section class="wrap stack g24">
+    <div class="stack g10 narrow">
+      <span class="eyebrow">The numbers</span>
+      <h1>The category is real. The pricing wasn’t.</h1>
+      <p class="soft">Every figure on this page has a source, and every assumption is
+        labelled as one. That distinction matters here, because researching the
+        original plan’s price points is what produced its central finding.</p>
+    </div>
+
+    <div class="verdict">
+      <h2>Headline</h2>
+      <p class="soft">The market is genuine — two billion-dollar US categories, millions of
+        households, reptiles the fastest-growing pet segment. But the prices in the
+        original plan sat <b>3–8× above what these species actually retail for</b>. At
+        real prices, selling the animals alone does not cover paid customer
+        acquisition on a first order. The business case rests on what surrounds the
+        animal, not the animal.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="wrap stack g16">
+    <div class="stack g6">
+      <span class="eyebrow">Researched</span>
+      <h2>The categories are large and growing</h2>
+    </div>
+    <div class="tiles">
+      <div class="tile"><span class="val">$1.84B</span><span class="lbl">US ornamental fish market, 2025</span><span class="src mono">Future Market Insights</span></div>
+      <div class="tile"><span class="val">11.1M</span><span class="lbl">US households keeping freshwater fish</span><span class="src mono">3rd most popular pet</span></div>
+      <div class="tile"><span class="val">$1.2–1.5B</span><span class="lbl">US reptile market incl. enclosures &amp; supplies</span><span class="src mono">Industry estimates</span></div>
+      <div class="tile"><span class="val">6M</span><span class="lbl">US households owning ~12M reptiles</span><span class="src mono">APPA-derived</span></div>
+      <div class="tile"><span class="val">+38%</span><span class="lbl">Growth in reptile-owning households since 2016</span><span class="src mono">Fastest-growing category</span></div>
+      <div class="tile"><span class="val">$480</span><span class="lbl">Average reptile owner annual spend</span><span class="src mono">APPA 2025</span></div>
+    </div>
+    <p class="note">Demand is not the problem. An engaged hobbyist spends around
+      <b>$1,500 a year</b> — roughly three times what a mid-range specimen costs. Note
+      where that money goes: the reptile market figure counts enclosures and supplies
+      inside it.</p>
+  </section>
+
+  <hr>
+
+  <section class="wrap stack g16">
+    <div class="stack g6 narrow">
+      <span class="eyebrow">Finding 1</span>
+      <h2>Assumed prices vs. what these species actually sell for</h2>
+      <p class="soft sm">Retail asking prices from active US sellers, against the figures
+        in the original plan. Same species, same market, same week.</p>
+    </div>
+
+    <figure>
+      <div class="legend">
+        <span><i class="swatch" style="background:var(--cat-researched)"></i> Researched market price</span>
+        <span><i class="swatch" style="background:var(--cat-assumed)"></i> Assumed in the original plan</span>
+      </div>
+      <div class="chart" id="c1"></div>
+      <details>
+        <summary>View as table</summary>
+        <div class="tbl-scroll">
+          <table>
+            <thead><tr><th>Species</th><th>Researched range</th><th>Used now</th><th>Original plan</th><th>Over by</th></tr></thead>
+            <tbody>
+              <tr><td>Orchid Mantis</td><td class="num">$50–100</td><td class="num">$85</td><td class="num">$420</td><td class="num">4.9×</td></tr>
+              <tr><td>Altum Angelfish</td><td class="num">$45–130 typical</td><td class="num">$110</td><td class="num">$380</td><td class="num">3.5×</td></tr>
+              <tr><td>Emerald Tree Boa</td><td class="num">$150–550</td><td class="num">$495</td><td class="num">$1,450</td><td class="num">2.9×</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </figure>
+
+    <p class="note">A luxury brand can price above market — but it has to know what market
+      is, and be able to say what the premium buys. The plan’s figures weren’t a premium
+      over a known baseline; there was no baseline.</p>
+  </section>
+
+  <hr>
+
+  <section class="wrap stack g16">
+    <div class="stack g6 narrow">
+      <span class="eyebrow">Finding 2</span>
+      <h2>What’s left after acquiring the customer</h2>
+      <p class="soft sm">Gross margin on one animal at researched prices, less the cost of
+        acquiring the buyer. Luxury e-commerce CAC averages <b>$175</b> (range $120–400).</p>
+    </div>
+
+    <figure>
+      <div class="legend">
+        <span><i class="swatch" style="background:var(--neg)"></i> Loses money on first order</span>
+        <span><i class="swatch" style="background:var(--pos)"></i> Clears acquisition cost</span>
+      </div>
+      <div class="chart" id="c2"></div>
+      <details>
+        <summary>View as table &amp; assumptions</summary>
+        <div class="tbl-scroll">
+          <table>
+            <thead><tr><th>Product</th><th>Price</th><th>Gross @ 40%</th><th>Less CAC</th><th>First order</th></tr></thead>
+            <tbody>
+              <tr><td>Orchid Mantis</td><td class="num">$85</td><td class="num">$34</td><td class="num">$175</td><td class="num">−$141</td></tr>
+              <tr><td>Altum Angelfish</td><td class="num">$110</td><td class="num">$44</td><td class="num">$175</td><td class="num">−$131</td></tr>
+              <tr><td>Emerald Tree Boa</td><td class="num">$495</td><td class="num">$198</td><td class="num">$175</td><td class="num">+$23</td></tr>
+            </tbody>
+          </table>
+          <p class="xs mute" style="margin-top:.7rem">The 40% gross margin is an
+            <b>assumption, not a finding</b> — no supplier quotes exist yet. Live-animal
+            retail carries mortality, holding and freight costs that push real margin
+            below this, so these figures are the optimistic case.</p>
+        </div>
+      </details>
+    </figure>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Repeat purchase</h3>
+        <p>Luxury has the best CAC-to-LTV ratio in e-commerce at 5.2×. But an emerald tree
+          boa is a 15–20 year commitment — this category has structurally low repeat rates
+          on the animal itself.</p>
+      </div>
+      <div class="card">
+        <h3>Cheaper acquisition</h3>
+        <p>Content and organic search instead of paid. Slow, but this category has real
+          editorial substance to work with — which is what the Sanctuary Journal already
+          is. Note CAC rose 40–60% between 2023 and 2025.</p>
+      </div>
+      <div class="card">
+        <h3>Sell more than the animal</h3>
+        <p>Enclosure, planting, installation, ongoing maintenance. Larger order value,
+          recurring revenue, no mortality risk on the hardware. This is the one that
+          changes the arithmetic rather than hoping around it.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="wrap stack g16">
+    <div class="stack g6 narrow">
+      <span class="eyebrow">Finding 3</span>
+      <h2>One species had to be pulled</h2>
+    </div>
+    <div class="verdict" style="border-left-color:var(--flag);background:var(--flag-wash)">
+      <h3>Golden Mantella <span class="mono xs mute" style="font-weight:400">Mantella aurantiaca</span></h3>
+      <p class="soft sm">Listed as available on waitlist. Research found it is
+        <b>IUCN Critically Endangered</b> with an area of occupancy under 10 km²,
+        <b>CITES Appendix II</b> with an annual export quota in the low hundreds, and
+        <b>export suspended since 2010</b> pending non-detriment findings. Overcollection
+        for the pet trade is a named driver of its decline.</p>
+      <p class="soft sm">Offering it would have contradicted the custodianship charter the
+        whole site is built on. It is now display-and-education only, and blocked at the
+        API so it cannot be requested.</p>
+    </div>
+    <p class="note">This is the concrete argument for researching a species <em>before</em>
+      listing it rather than after. One of five had a disqualifying legal status that
+      nobody had checked.</p>
+  </section>
+
+  <hr>
+
+  <section class="wrap stack g16">
+    <div class="stack g6 narrow">
+      <span class="eyebrow">The read</span>
+      <h2>The animal is the cheapest thing being sold</h2>
+    </div>
+    <p class="soft narrow">A specimen researches at $85–495. An engaged hobbyist spends
+      ~$1,500 a year, and the reptile market counts enclosures and supplies inside its
+      $1.2–1.5B. A living biotope — custom enclosure, planting, installation, ongoing
+      maintenance — carries a materially higher order value, generates recurring revenue,
+      has no live-animal mortality risk on the hardware portion, and sits directly on an
+      architecture and design background.</p>
+    <p class="note">Worth noting: this is the same conclusion the ornamental fish export
+      research reached independently, where a habitat design studio was parked for
+      re-examination. Two separate lines of research now point the same way.
+      <b>Treat the animal as the entry point to a biotope commission, not as the
+      product.</b></p>
+  </section>
+
+  <hr>
+
+  <section class="wrap stack g16">
+    <div class="stack g6 narrow">
+      <span class="eyebrow">Honest gaps</span>
+      <h2>What we still don’t know</h2>
+      <p class="soft sm">None of the below was researched. None should be presented to
+        anyone as known.</p>
+    </div>
+    <ul class="plain">
+      <li><b>Wholesale cost of any species.</b> The 40% margin above is an assumption. Real margin needs supplier quotes.</li>
+      <li><b>Mortality and DOA rates</b> on the actual shipping routes.</li>
+      <li><b>State-level legality</b> per species, per destination. US live-animal law is state-level; federal screening alone is not sufficient to ship.</li>
+      <li><b>Whether a premium over market clears.</b> No evidence yet that buyers here pay above the researched band for presentation and documentation.</li>
+      <li><b>Real conversion rate for this offer.</b> The 1.17% DTC median is across all e-commerce; a consultation-gated flow with no cart converts very differently — possibly much better, possibly far worse.</li>
+      <li><b>Biotope commission pricing.</b> The recommendation above is a direction, not a costed model.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p class="xs mute">Sources: Future Market Insights · Grand View Research · APPA
+    2025 · PetsNerd · Top Growth Marketing (DTC conversion benchmarks, 19 stores /
+    ~17M sessions) · Retainful (CAC benchmarks) · CITES · IUCN Red List · retail
+    listings from Imperial Tropicals, Aqua Imports, Wet Spot, Shoreline Aquatics,
+    Backwater Reptiles, Big Apple Herp, Bugs In Cyberspace, USMantis. Retail figures
+    are asking prices, not transaction prices. Full detail and links in
+    <span class="mono">docs/MARKET-RESEARCH.md</span>.</p>
+</footer>
+
+<script>
+  // Chart 1 — grouped horizontal bars. Every bar is direct-labelled, so the
+  // data is fully readable without hover; the table view carries it for
+  // screen readers and print.
+  const C1_MAX = 1500;
+  const c1 = [
+    { name: "Orchid Mantis", latin: "H. coronatus", researched: 85,  assumed: 420  },
+    { name: "Altum Angelfish", latin: "P. altum",   researched: 110, assumed: 380  },
+    { name: "Emerald Tree Boa", latin: "C. caninus", researched: 495, assumed: 1450 },
+  ];
+  // A bar wider than this has no room for an outside label without clipping.
+  const INSIDE_AT = 72;
+  const barRow = (value, varName) => {
+    const pct = (value / C1_MAX) * 100;
+    const inside = pct > INSIDE_AT;
+    return `<div class="track" style="height:19px">
+      <div class="bar" style="width:${pct}%;background:var(--${varName});left:0;height:14px">
+        <span class="tip${inside ? " inside" : ""}">$${value.toLocaleString()}</span></div>
+    </div>`;
+  };
+  document.getElementById("c1").innerHTML = c1.map(d => `
+    <div class="row">
+      <span class="name">${d.name}<em>${d.latin}</em></span>
+      <div class="stack" style="gap:2px">
+        ${barRow(d.researched, "cat-researched")}
+        ${barRow(d.assumed, "cat-assumed")}
+      </div>
+    </div>`).join("");
+
+  // Chart 2 — diverging around zero. Position encodes sign as well as colour,
+  // so the loss/gain split survives a colour-blind or greyscale reading.
+  const MIN = -170, MAX = 70, SPAN = MAX - MIN;
+  const zeroPct = ((0 - MIN) / SPAN) * 100;
+  const c2 = [
+    { name: "Orchid Mantis", sub: "$85 price",  v: -141 },
+    { name: "Altum Angelfish", sub: "$110 price", v: -131 },
+    { name: "Emerald Tree Boa", sub: "$495 price", v:  23 },
+  ];
+  document.getElementById("c2").innerHTML = c2.map(d => {
+    const pct = ((d.v - MIN) / SPAN) * 100;
+    const neg = d.v < 0;
+    const left  = neg ? pct : zeroPct;
+    const width = Math.abs(pct - zeroPct);
+    return `
+      <div class="row">
+        <span class="name">${d.name}<em>${d.sub}</em></span>
+        <div class="track">
+          <div class="zero" style="left:${zeroPct}%"></div>
+          <div class="bar ${neg ? "left" : ""}"
+               style="left:${left}%;width:${width}%;background:var(--${neg ? "neg" : "pos"})">
+            <span class="tip">${neg ? "−" : "+"}$${Math.abs(d.v)}</span>
+          </div>
+        </div>
+      </div>`;
+  }).join("") + `
+    <div class="row" style="padding-top:.1rem">
+      <span></span>
+      <div style="position:relative;height:1.1rem">
+        <span class="zero-lbl mono" style="left:${zeroPct}%">$0 · breakeven</span>
+      </div>
+    </div>`;
+</script>

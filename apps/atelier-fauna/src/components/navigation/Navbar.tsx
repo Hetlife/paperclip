@@ -22,6 +22,12 @@ export function Navbar() {
 
         <div className="flex items-center gap-2">
           <Link
+            href="/collection"
+            className="hidden rounded-full px-3 py-2 text-sm font-medium tracking-tight text-neutral-500 transition-colors hover:text-neutral-900 lg:inline-flex dark:text-neutral-400 dark:hover:text-neutral-100"
+          >
+            Viewing Room
+          </Link>
+          <Link
             href="/register"
             className="hidden rounded-full px-3 py-2 text-sm font-medium tracking-tight text-neutral-500 transition-colors hover:text-neutral-900 sm:inline-flex dark:text-neutral-400 dark:hover:text-neutral-100"
           >
