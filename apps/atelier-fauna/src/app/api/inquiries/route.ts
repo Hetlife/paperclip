@@ -3,6 +3,7 @@ import { insert } from "@/server/store";
 import { validateInquiry } from "@/server/validation";
 import { rateLimit, clientKey } from "@/server/rateLimit";
 import { getSpecimenById } from "@/data/faunaData";
+import { notify } from "@/server/notify";
 
 export const runtime = "nodejs";
 
@@ -64,6 +65,17 @@ export async function POST(request: Request) {
     specimenCommonName: specimen?.commonName,
     specimenStatusAtSubmission: specimen?.status,
     status: "pending_review" as const,
+  });
+
+  // After persistence, and awaited so serverless doesn't kill the request
+  // mid-flight. notify() never throws — a broken webhook must not turn a
+  // saved inquiry into an error for the buyer.
+  await notify({
+    kind: "inquiry",
+    id: saved.id,
+    email: saved.email,
+    specimen: specimen?.commonName,
+    availableSpace: saved.availableSpace,
   });
 
   return NextResponse.json(

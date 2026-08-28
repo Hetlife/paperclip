@@ -59,6 +59,13 @@ Requirements:
   research" with "This is not a clearance" stated inline. ✅ See the note
   on wording in `ScreeningResults.tsx`; this is the one place where a
   cosmetic choice would misrepresent what the screen can establish.
+- **R1.8** A submission must reach a human. Both endpoints announce to a
+  configurable webhook (`ATELIER_NOTIFY_WEBHOOK`). ✅ Three constraints
+  hold, all test-verified: a failed notification never fails the
+  submission; the payload excludes the free-text `notes` field; an
+  unconfigured deploy logs the summary and succeeds normally.
+  *Not built:* retry/queueing — delivery is single-attempt, so an alert
+  can be lost even though the record never is.
 
 ## R2 — Legal screening
 

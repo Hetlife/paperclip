@@ -3,6 +3,7 @@ import { insert } from "@/server/store";
 import { validateSpeciesIntake } from "@/server/validation";
 import { rateLimit, clientKey } from "@/server/rateLimit";
 import { screenSpecies } from "@/server/speciesScreening";
+import { notify } from "@/server/notify";
 
 export const runtime = "nodejs";
 
@@ -49,6 +50,17 @@ export async function POST(request: Request) {
     ...result.value,
     screening: screened,
     status: "pending_research" as const,
+  });
+
+  // After persistence; notify() never throws. Note this deliberately does
+  // not forward `notes` — free text can contain anything, and the
+  // recipient doesn't need it to decide whether to act.
+  await notify({
+    kind: "species-register",
+    id: saved.id,
+    email: saved.email,
+    requested: saved.requestedSpecies,
+    excluded: excluded.map((s) => s.input),
   });
 
   return NextResponse.json(

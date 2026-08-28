@@ -103,15 +103,67 @@ There's no database because one is premature before the site takes its
 first real inquiry. Everything is written so swapping in Postgres means
 replacing that one file — routes never touch the filesystem directly.
 
+## Notifications
+
+`src/server/notify.ts` POSTs a JSON payload to whatever URL is in
+`ATELIER_NOTIFY_WEBHOOK`. That one variable covers Slack, Discord,
+Zapier, Make, n8n and most CRM intake endpoints — pick a provider by
+setting the env var, not by editing code. Copy `.env.example` to
+`.env.local` to configure it.
+
+Payload shape:
+
+```json
+{
+  "text": "New species register — 2 entries, 1 excluded by screening — from buyer@example.com",
+  "event": "species-register",
+  "id": "6ccd15bd-…",
+  "email": "buyer@example.com",
+  "requested": ["Neon Tetra", "Walking Catfish"],
+  "excluded": ["Walking Catfish"]
+}
+```
+
+`text` is what Slack and Discord render directly; the structured fields
+are for consumers that branch on them. An inquiry sends `specimen` and
+`availableSpace` in place of `requested`/`excluded`.
+
+Three rules this module holds to, verified by test:
+
+1. **A failed notification never fails the submission.** The record is
+   already persisted by the time notify runs. Losing the alert is bad;
+   losing the buyer's request is worse. `notify()` returns a result
+   object and throws on no path.
+2. **Data minimisation.** The payload carries the submitter's email —
+   you have to be able to reply — but never the free-text `notes` field,
+   which can contain anything. Confirmed by test: a submission whose
+   notes read `SECRET NOTE SHOULD NOT LEAK` produced a payload with no
+   trace of it.
+3. **Unconfigured is a normal state.** With no webhook set, the summary
+   logs to stdout and the submission succeeds as usual.
+
+Verified behaviour across all four paths:
+
+| Situation | Submission | Notify outcome |
+|---|---|---|
+| No webhook configured | `201` | `skipped`, summary logged |
+| Webhook accepts | `201` | `sent` |
+| Webhook returns `500` | `201` | `failed`, summary logged |
+| Webhook host unreachable | `201` | `failed`, summary logged |
+
+Delivery is best-effort and single-attempt, with a 5s timeout. There is
+no retry queue and no dead-letter — a webhook that is down when a
+submission lands loses that alert, though never the record. If alerts
+become load-bearing, add a queue rather than raising the timeout.
+
 ## Before this handles real traffic
 
 Honest list of what's missing:
 
-- **No notification.** A submitted inquiry lands in a JSON file and
-  nothing tells anyone. Wire an email/Slack/CRM hook, or inquiries will
-  sit unread.
 - **No auth on reads.** There is no endpoint to list inquiries — read the
   JSON directly. Add authentication before building an admin view.
+- **Notification delivery is not guaranteed.** Single attempt, no retry
+  (see above). Records are always safe; alerts are not.
 - **Single-instance only.** Both the file store (last write wins) and the
   in-memory rate limiter reset per instance and don't coordinate. Move
   to Postgres + a shared limiter (Redis, or the platform's own) before

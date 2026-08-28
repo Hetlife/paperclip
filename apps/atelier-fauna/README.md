@@ -55,10 +55,11 @@ this session:
   gradient via `SpecimenMedia.tsx` rather than a broken image — replace
   the paths with real photography when it exists, no code changes
   needed.
-- **Backend exists but nothing is notified.** A submitted inquiry
-  persists to a JSON file and no email/Slack/CRM hook fires, so
-  inquiries would sit unread. See `docs/BACKEND.md` → "Before this
-  handles real traffic" for the full honest gap list.
+- **No retry on notifications.** Submissions now announce to a webhook
+  (`ATELIER_NOTIFY_WEBHOOK` — see `.env.example`), but delivery is
+  single-attempt with no queue. A webhook that's down when a submission
+  lands loses that alert; the record itself is never lost. See
+  `docs/BACKEND.md` → "Before this handles real traffic".
 - **No real 3D models yet, but the viewer is wired.**
   `Specimen3DViewer.tsx` (react-three-fiber) loads a `.glb` and loops
   its `"Idle"` animation clip; `SpecimenMedia.tsx` prefers it over the
