@@ -1,0 +1,3 @@
+id,supplier_name,location,mpeda_registered,mpeda_reg_no,contact_name,phone,species_common,species_scientific,captive_bred_confirmed,moq_units,fob_price_usd,freight_est_usd,packing_oxygen_usd,health_cert_usd,customs_est_usd,fx_cost_usd,doa_provision_pct,landed_cost_usd,benchmark_landed_usd,margin_vs_benchmark,commission_pct_agreed,quote_date,quote_valid_until,notes
+S001,,,unknown,,,,,,unconfirmed,,,,,,,,15,,,,,,,
+S002,,,unknown,,,,,,unconfirmed,,,,,,,,15,,,,,,,

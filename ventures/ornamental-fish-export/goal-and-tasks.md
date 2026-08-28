@@ -1,78 +1,120 @@
-# Goal & Task Tracks — Ornamental Fish Export
+# Goal & tasks
 
-Source of truth for the active goal and task list. Update task statuses
-here as work progresses (`todo` / `in_progress` / `blocked` / `done`).
-This is the same content prepared for pasting into a live Paperclip
-company — see `README.md` for how the two relate.
+Source of truth for task state. Update the `Status` column as work
+happens. The phase ordering and kill gates live in `PLAYBOOK.md` —
+this file is the task-level detail underneath it.
+
+Status values: `todo` · `in_progress` · `blocked` · `done` · `killed`
 
 ---
 
 ## Goal
 
-**Get to Shipment One — Ornamental Fish Export Validation**
+**Get to shipment one — or a documented kill decision.**
 
-Validate whether a US-bound ornamental fish export business from India is
-viable before building any brand, website, or AI agent infrastructure.
-Success = one completed shipment OR a clear, evidenced kill decision.
-No revenue target for this phase. Zero agent spend beyond the ₹10k–30k
-tooling/outreach cap. AI agents may draft and research; humans decide
-anything legal, financial, or animal-welfare related.
+Validate whether a US-bound ornamental fish export business from India
+is viable before building any brand, website, or agent infrastructure.
+No revenue target this phase. Budget ₹10k–30k total, ₹5k approval gate
+per item.
 
-**Target outcomes (all required to call this goal complete):**
-1. Legal/compliance review complete (species list, licences, entity)
-2. 20+ US buyer conversations held across both wholesaler and retailer segments
-3. 3+ Indian MPEDA-eligible exporters quoted
-4. One buyer verbally committed to a trial consignment, OR a documented
-   kill decision with reasons
+**Complete when all four are true:**
+1. Species eligibility verified by a human/counsel
+2. 20+ US buyer conversations held across both segments
+3. 3+ Indian exporters quoted with real FOB numbers
+4. One buyer committed to a trial consignment — **or** a written kill
+   decision with reasons
 
 ---
 
-## Track A — Legal & Entity (human-led, agent-assisted drafting only)
+## Phase 1 — Free intelligence
 
-| # | Task | Owner | Status | Blocked by |
-|---|------|-------|--------|------------|
-| A1 | Decide and register the new separate entity (name, structure, GST) — not SevaaConnect | Human | todo | — |
-| A2 | Compile species eligibility list: freshwater captive-bred, cross-checked against Schedule 1 WLPA, CITES, US injurious wildlife list. Agent drafts, human/counsel verifies. | Agent draft / Human verify | todo | — |
-| A3 | Confirm IEC (DGFT) and MPEDA "OF" registration requirements and timeline | Human | todo | A1 |
-| A4 | Draft DOA policy, buyer terms, supplier agreement templates. Human/counsel finalizes. | Agent draft / Human verify | todo | — |
+| # | Task | Owner | Status | Blocked by | Done when |
+|---|---|---|---|---|---|
+| 1.1 | Draft species eligibility table | Agent draft | todo | — | `templates/species-legality-check.md` has ≥15 candidate rows, all researched, none marked VERIFIED by an agent |
+| 1.2 | Build US buyer list, both segments | Agent | todo | — | `templates/buyer-log.csv` has 40–60 rows with contact + current source populated |
+| 1.3 | Vet 3+ Gujarat exporters/breeders | Co-founder | todo | — | 3+ named suppliers in `supplier-quote-log.csv`, MPEDA status recorded, willing to engage |
+| 1.4 | Close the free items in the verification queue | Agent draft / Human confirm | todo | — | V2, V4, V9–V12 moved off `UNVERIFIED` in `verification-queue.md` |
 
-## Track B — Buyer Discovery (agent-assisted outreach, human decides)
-
-| # | Task | Owner | Status | Blocked by |
-|---|------|-------|--------|------------|
-| B1 | Build list of 40–60 candidate US buyers, both segments, with contact info, apparent current supply source, species focus | Agent | todo | — |
-| B2 | Draft outreach + discovery-call script (current South Asia imports, what would prompt a switch, order size, payment terms) | Agent draft / Human sends | todo | B1 |
-| B3 | Hold 20+ discovery conversations across both segments; agent logs outcomes and flags real intent | Human calls / Agent logs | todo | B2 |
-| B4 | Synthesize findings after 10+ conversations: which segment responds better, cited differentiators, price expectations | Agent | todo | B3 (partial) |
-
-## Track C — Supply Side (co-founder led, agent-assisted)
-
-| # | Task | Owner | Status | Blocked by |
-|---|------|-------|--------|------------|
-| C1 | Identify and vet 3+ Gujarat-based MPEDA-eligible exporters/breeders willing to work on brokerage terms | Human (co-founder) | todo | — |
-| C2 | Convert supplier WhatsApp stocklists into clean SKU tables with verified scientific names; flag species needing legal re-check | Agent draft / Human verify | todo | C1 |
-| C3 | Get real FOB quotes from vetted exporters | Human | todo | C1 |
-
-## Final — Go/No-Go Decision
-
-| # | Task | Owner | Status | Blocked by |
-|---|------|-------|--------|------------|
-| D1 | Founder decision: proceed to shipment one or kill with documented reasons. Re-examine broker vs exporter-of-record, and the aquarium/habitat design studio alternative. | Human | todo | A2, A3, B4, C3 |
+**🚦 Gate 1** — ≥10 plausibly sellable species **and** ≥40 named buyers
+**and** ≥3 willing suppliers. Any failure stops the venture here.
 
 ---
 
-## Agent roles (minimal, matches "no AI infra before shipment 3")
+## Phase 2 — The kill test
 
-- **Research/Ops Agent** — owns A2 (draft), A4 (draft), B1, B2 (draft),
-  B4, C2 (draft). Research, drafting, synthesis only. No legal,
-  financial, or welfare decisions.
+| # | Task | Owner | Status | Blocked by | Done when |
+|---|---|---|---|---|---|
+| 2.1 | Draft discovery call script | Agent draft | todo | 1.2 | Script covers: current source, switch triggers, order size, payment terms, DOA expectations |
+| 2.2 | Hold 20+ discovery conversations | **Founder (human)** | todo | 2.1, Gate 1 | 20+ rows at `conversation_held` or beyond, split across both segments |
+| 2.3 | Log every conversation outcome | Agent | todo | 2.2 | Every contacted row has `interest_level` and `differentiator_cited` filled |
+| 2.4 | Mid-point synthesis at 10 calls | Agent | todo | 2.2 (10 calls) | Written summary: which segment responds, what differentiators are actually cited |
 
-Do NOT hire: marketing agents, website-building agents, customer support
-agents, or a multi-department org — explicitly out of scope until after
-shipment three.
+**🚦 Gate 2 — the decisive gate.** ≥3 buyers at `interest_level:
+concrete` **and** ≥1 differentiator cited by buyers in their own words.
+Failure here kills the venture — see `PLAYBOOK.md` Phase 2.
 
-## Budget guardrail
+---
 
-Hard cap: ₹10,000–30,000 for this entire validation phase. No agent
-infrastructure spend. Any single item over ₹5,000 requires founder
-approval before committing.
+## Phase 3 — Pricing reality
+
+| # | Task | Owner | Status | Blocked by | Done when |
+|---|---|---|---|---|---|
+| 3.1 | Get real FOB quotes for species buyers asked about | Founder | todo | Gate 2, 1.3 | ≥3 suppliers quoted on overlapping species, dated and valid |
+| 3.2 | Build landed-cost model with 15% DOA provision | Agent draft / Founder verify | todo | 3.1 | `landed_cost_usd` computed for every quoted line |
+| 3.3 | Benchmark against what buyers say they pay | Agent | todo | 3.2, 2.3 | `benchmark_landed_usd` and `margin_vs_benchmark` filled |
+
+**🚦 Gate 3** — landed cost competitive with incumbent South Asian
+sources at equivalent quality, DOA already priced in.
+
+---
+
+## Phase 4 — Decide, then register
+
+Registration is deliberately **after** the decision. IEC and MPEDA cost
+money and weeks; neither is needed to hold a discovery conversation.
+
+| # | Task | Owner | Status | Blocked by | Done when |
+|---|---|---|---|---|---|
+| 4.1 | Go/no-go decision, documented | **Founder** | todo | Gate 3 | Written decision + reasons in `decisions.md` |
+| 4.2 | Broker vs exporter-of-record for shipment one | Founder | todo | 4.1 | Decision logged. **See `verification-queue.md` V9** — the brokerage revenue target may be arithmetically unreachable |
+| 4.3 | Register the new separate entity | Founder | todo | 4.1 = GO | Entity registered, GST active, name in `decisions.md` |
+| 4.4 | Apply for IEC (DGFT) + MPEDA "OF" | Founder | todo | 4.3 | Both applications submitted, reference numbers logged |
+| 4.5 | Finalize DOA policy, buyer terms, supplier agreement | Agent draft / Counsel finalize | todo | 4.1 = GO | Counsel-reviewed versions saved; species table rows signed off |
+| 4.6 | *(If NO-GO)* Post-mortem + reopen design studio option | Founder | todo | 4.1 = NO-GO | Written post-mortem in `sessions/`; studio option re-evaluated |
+
+**🚦 Gate 4** — entity, IEC, MPEDA, verified species list, and final
+terms all in hand. **Never ship before this gate.**
+
+---
+
+## Phase 5 — Shipment one
+
+| # | Task | Owner | Status | Blocked by | Done when |
+|---|---|---|---|---|---|
+| 5.1 | Close one buyer on a trial consignment | Founder | todo | Gate 4 | Written terms agreed, payment method settled |
+| 5.2 | Place the order | Founder | todo | 5.1 | PO issued to vetted exporter |
+| 5.3 | Inspect stock and packing pre-dispatch | Co-founder | todo | 5.2 | Physical inspection done, welfare standards confirmed |
+| 5.4 | Ship, track, record every real cost | Founder | todo | 5.3 | Every actual cost logged against the model |
+| 5.5 | Record actual DOA, margin, customs friction | Both | todo | 5.4 | Real numbers captured at delivery |
+| 5.6 | Post-shipment review vs the Phase 3 model | Agent draft / Founder review | todo | 5.5 | Written variance analysis: where the model was wrong |
+
+**🚦 Gate 5** — DOA under ~15%, margin near model, buyer reorders.
+Three such shipments before any automation work begins.
+
+---
+
+## Agent roles
+
+**Research/Ops Agent** — owns 1.1, 1.2, 1.4, 2.1, 2.3, 2.4, 3.2, 3.3,
+4.5 (drafts), 5.6 (draft). Research, drafting, logging, synthesis only.
+No legal, financial, welfare, or pricing decisions.
+
+Do not hire marketing, website, or support agents. Out of scope until
+after shipment three.
+
+## Not in scope this phase
+
+Website · brand · content · domestic India retail · marine species ·
+reptiles · invertebrates · breeding operations · experience centre ·
+the multi-agent architecture · the aquarium/habitat design studio
+(parked, revisited only at task 4.6)

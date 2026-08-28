@@ -1,28 +1,72 @@
 # Ornamental Fish Export — India → USA
 
-Pre-revenue, pre-validation venture. AI-operated where safe, human-owned
-everywhere legal, financial, or animal welfare is involved.
+Pre-revenue, pre-validation venture. AI-assisted where safe, human-owned
+wherever legal, financial, or animal-welfare judgement is involved.
 
-## Files in this folder
+---
 
-- `brief.md` — the full filled business planning brief (idea, model,
-  validation, legal, product scope, go-to-market, team, risks)
-- `decisions.md` — founder decisions log, append-only, dated
-- `goal-and-tasks.md` — the current goal and task tracks (source of truth
-  for what to paste into Paperclip or work from directly)
-- `sessions/` — one file per work session, dated, so progress is
-  traceable over time instead of buried in chat history
+## Status
 
-## Current phase
+**Phase 1 — Free intelligence. Not yet started.**
 
-**Validation.** Goal: get to shipment one, or a documented kill decision.
-No AI agent infrastructure, no website, no brand work until after
-shipment three. See `goal-and-tasks.md` for the active task list.
+| | |
+|---|---|
+| Shipments completed | 0 |
+| Buyers contacted | 0 |
+| Suppliers vetted | 0 |
+| Species verified | 0 |
+| Spent to date | ₹0 of ₹10k–30k |
+| Next action | Task 1.1 / 1.2 (agent) and 1.3 (co-founder) — all three run in parallel |
+| Next gate | **Gate 1** — anything to sell, to anyone, from anyone? |
 
-## How to use this folder
+---
 
-- Update `decisions.md` whenever a founder decision is made (broker vs
-  exporter-of-record, entity name, budget changes, etc.)
-- Update `goal-and-tasks.md` task statuses as work progresses
-- Start a new file in `sessions/` for each work session, named
-  `YYYY-MM-DD-short-topic.md`, summarizing what happened and what's next
+## Start here
+
+1. **`PLAYBOOK.md`** — the phased step-by-step with kill gates. Read
+   this first; it explains *why* the order is what it is.
+2. **`goal-and-tasks.md`** — task-level detail: owners, dependencies,
+   and what "done" means for each.
+3. **`AGENTS.md`** — hard constraints for any agent or session working
+   here.
+
+## All files
+
+| File | What it is |
+|---|---|
+| `AGENTS.md` | Constraints and session protocol — read before working |
+| `PLAYBOOK.md` | Phased plan with five kill gates |
+| `goal-and-tasks.md` | Task list with owners and done-criteria |
+| `brief.md` | Full business brief — background and reasoning |
+| `decisions.md` | Append-only founder decisions log |
+| `verification-queue.md` | Unverified claims — **check before relying on any of them** |
+| `templates/` | The actual working logs: buyer, supplier, species |
+| `sessions/` | One file per work session |
+
+## The five gates, in one line each
+
+1. **Gate 1** — Is there anything to sell, to anyone, from anyone?
+2. **Gate 2** — Will a US buyer actually buy? *(the decisive one)*
+3. **Gate 3** — Can the landed cost beat Sri Lanka / Thailand / Singapore?
+4. **Gate 4** — Legally cleared to ship?
+5. **Gate 5** — Repeat or stop?
+
+## The two things most likely to kill this
+
+1. **No differentiator.** There is no proven reason for a US buyer to
+   leave an established South Asian supply line. Gate 2 answers this
+   for the price of twenty phone calls.
+2. **The market is small and volatile.** India's *entire* national
+   ornamental fish export trade runs at roughly USD 2–5M/year and fell
+   ~58% between 2023 and 2024. The year-one revenue target implies
+   capturing ~8% of it under the brokerage model. See
+   `verification-queue.md` V9.
+
+## Working rules
+
+- Update task status in `goal-and-tasks.md` as work happens
+- Append to `decisions.md` when a founder decision is made — never edit
+  past entries
+- Write a session file in `sessions/YYYY-MM-DD-topic.md` every session
+- Update the status table above at the end of each session
+- Nothing marked `UNVERIFIED` goes into a quote, filing, or decision
