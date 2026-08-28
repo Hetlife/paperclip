@@ -1,0 +1,26 @@
+import type { AvailabilityStatus } from "@/types/fauna";
+import { cn } from "@/lib/cn";
+
+const LABELS: Record<AvailabilityStatus, string> = {
+  available: "Available for Placement",
+  waitlist: "In Sanctuary Lineage • Waitlist Open",
+  sanctuary_only: "Sanctuary Only • Display",
+};
+
+export function StatusBadge({ status }: { status: AvailabilityStatus }) {
+  const isAvailable = status === "available";
+
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full border border-black/[0.06] bg-white/60 px-3 py-1 text-xs font-medium tracking-wide text-neutral-600 backdrop-blur-md dark:border-white/[0.12] dark:bg-white/5 dark:text-neutral-300">
+      <span className="relative flex h-2 w-2">
+        <span
+          className={cn(
+            "absolute inline-flex h-full w-full rounded-full",
+            isAvailable ? "bg-green-400 animate-breathe" : "bg-neutral-400",
+          )}
+        />
+      </span>
+      {LABELS[status]}
+    </span>
+  );
+}
