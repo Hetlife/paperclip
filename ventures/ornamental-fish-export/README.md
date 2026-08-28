@@ -40,8 +40,9 @@ wherever legal, financial, or animal-welfare judgement is involved.
 | `brief.md` | Full business brief — background and reasoning |
 | `decisions.md` | Append-only founder decisions log |
 | `verification-queue.md` | Unverified claims — **check before relying on any of them** |
+| `CONVERSATION-LOG.md` | Chronological record of what was discussed each session |
 | `templates/` | The actual working logs: buyer, supplier, species |
-| `sessions/` | One file per work session |
+| `sessions/` | One file per work session (detailed work log) |
 
 ## The five gates, in one line each
 

@@ -53,9 +53,10 @@ No buyer has been contacted. No shipment has been made.
 
 ## How to end a session
 
-Every session must leave: updated task statuses, a session file, and a
-clear next action. Never leave a task ambiguous about who owns the next
-step.
+Every session must leave: updated task statuses, a session file, a new
+dated entry appended to `CONVERSATION-LOG.md` (append-only, never edit
+past entries), and a clear next action. Never leave a task ambiguous
+about who owns the next step.
 
 ## Commit convention
 
