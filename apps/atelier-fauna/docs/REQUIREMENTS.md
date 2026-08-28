@@ -38,7 +38,8 @@ photography, and animation work described below.
 
 ## R1 — Buyer species intake
 
-**BUILT.** `POST /api/species-intake`.
+**BUILT.** `POST /api/species-intake`, reachable from `/register`
+("The Register") via `SpeciesIntakeForm`.
 
 Requirements:
 
@@ -51,6 +52,13 @@ Requirements:
   are signal about what buyers want. ✅
 - **R1.5** Return per-entry screening results to the caller so a buyer
   learns immediately that a request is prohibited. ✅
+- **R1.6** A buyer-facing form must reach the endpoint — chip-style entry
+  with paste-splitting and dedupe, loading and error states. ✅
+- **R1.7** The UI must not present `needs_review` as approval. No green
+  check, no "cleared", no reassuring language — it is labelled "Passed to
+  research" with "This is not a clearance" stated inline. ✅ See the note
+  on wording in `ScreeningResults.tsx`; this is the one place where a
+  cosmetic choice would misrepresent what the screen can establish.
 
 ## R2 — Legal screening
 

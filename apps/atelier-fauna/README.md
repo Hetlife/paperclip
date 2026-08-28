@@ -39,6 +39,9 @@ this session:
 - The 3-step Custodianship Readiness & Consultation drawer (habitat
   review → readiness checklist → schedule request), wired to a real API
   with loading and error states
+- **The Register** (`/register`) — the buyer-facing species intake form:
+  chip entry with paste-splitting and dedupe, live screening results, and
+  an explicit "this is not a clearance" on anything that merely passed
 - **Backend**: `POST /api/inquiries` and `POST /api/species-intake` with
   validation, rate limiting, file-backed persistence, and server-side
   ethical gates — the readiness checklist is required and sanctuary-only
