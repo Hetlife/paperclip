@@ -10,10 +10,34 @@ Read this before working in `apps/atelier-fauna/`.
 3. **`npm run verify`** — typecheck → demo drift check → build → 19 smoke
    checks. If it fails on a clean checkout, fix that first.
 
+If `docs/HANDOFF.md` exists, read it too — it says what the last session
+was mid-way through.
+
+## Checkpoint as you go, not at the end
+
+```bash
+npm run checkpoint "what I am mid-way through"
+```
+
+A session can run out of context without warning, and everything not
+written down is lost. There is no reliable way to detect that limit from
+inside, so **don't try to save at the end — keep state current
+throughout**, and any reset becomes safe rather than only a politely
+announced one.
+
+Run it after each meaningful step: finishing a piece of research,
+landing a change that verifies, hitting a decision point. It regenerates
+`docs/HANDOFF.md` with branch, unpushed commits, working-tree state,
+demo sync status, and your note.
+
+Committing is the strongest checkpoint there is. Commit working
+increments rather than saving one large change for the end.
+
 ## End every session with
 
 ```bash
 npm run verify        # must pass before committing
+npm run checkpoint "done: <what landed>; next: <what follows>"
 ```
 
 Then append to `docs/TASK-LOG.md` (session history) and, if the founder
@@ -80,6 +104,8 @@ IUCN-threatened as placeable stock.
 | `npm run sync` | Regenerate demos from source |
 | `npm run sync:check` | Fail if demos are stale |
 | `npm run smoke` | Browser + API checks against a real build |
+| `npm run checkpoint "note"` | Regenerate `docs/HANDOFF.md` — run often |
+| `npm run discovery` | Scaffold today's discovery report |
 
 `npm run smoke` refuses to run if the port is already busy — an orphaned
 server serving a deleted build once produced 200s with empty bodies that
@@ -95,6 +121,10 @@ looked exactly like an app regression. If it complains:
 | `docs/FEEDBACK-LOG.md` | Preferences and past mistakes |
 | `docs/REQUIREMENTS.md` | R1–R7 with BUILT/PARTIAL/NOT BUILT |
 | `docs/MARKET-RESEARCH.md` | Every sourced figure |
+| `docs/MARKETPLACE-MODEL.md` | Marketplace economics + the encryption finding |
+| `docs/DAILY-DISCOVERY.md` | Protocol for the automated daily run |
+| `docs/HANDOFF.md` | Generated. What the last session was mid-way through |
+| `discovery/` | Dated daily reports + `prospects.csv` |
 | `docs/BACKEND.md` | API reference and gaps |
 | `ROADMAP.md` | The photo→3D→behaviour pipeline |
 | `demo/README.md` | The published pages |

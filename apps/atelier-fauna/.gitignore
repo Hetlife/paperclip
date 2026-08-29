@@ -5,6 +5,8 @@ node_modules/
 
 # Submitted inquiries — contains real email addresses, never commit
 .data/
+# Smoke-test scratch data
+.data-smoke/
 
 # The repo root .gitignore carries a broad `data/` rule (for Paperclip's own
 # runtime data dirs) which matches any directory named `data` at any depth —

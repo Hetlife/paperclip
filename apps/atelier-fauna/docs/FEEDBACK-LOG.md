@@ -35,6 +35,35 @@ Derived from repeated corrections. Treat these as defaults.
 
 ## Entries
 
+### 2026-08-29 — "automated to work everyday … what does the profit look like if we connect them through encrypted messages" + "auto save the progress … to have a clean starting session when it resets"
+
+**Three asks in one turn**, all acted on.
+
+*Daily automation:* built as research-and-draft only. It may never
+contact anyone — automated solicitation in the live-animal trade is both
+a spam problem and a regulatory one, and the founder decides what is
+sent.
+
+*The encrypted-marketplace question:* engaged with seriously rather than
+waved off, because the marketplace half is a real answer to the CAC
+problem. But the research found the encryption half is the wrong feature
+for two independent reasons — it accelerates disintermediation (the
+model's own failure mode), and federal material describes that exact
+architecture as the online wildlife-trafficking pattern, in direct
+conflict with the record-keeping compliant platforms owe. Written up in
+`MARKETPLACE-MODEL.md` with the alternative that keeps the good half.
+
+*Auto-save on context limit:* cannot be done as asked — there is no
+reliable way to detect the limit from inside a session. Built the
+version that actually works instead: `npm run checkpoint` keeps
+`docs/HANDOFF.md` current *throughout* a session, so any reset is safe
+rather than only a politely announced one. Said so plainly rather than
+implying detection was implemented.
+
+**Lesson:** when a request assumes a capability that doesn't exist, build
+the thing that achieves the underlying goal and name the gap — don't
+silently ship something weaker under the original label.
+
 ### 2026-08-28 — "make a task log and one feedback log … automate this work as much as possible and don't be lazy"
 
 **Read:** the duplication flagged in the previous session was the work to

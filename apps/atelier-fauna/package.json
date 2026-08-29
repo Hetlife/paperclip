@@ -12,7 +12,9 @@
     "sync": "node --import tsx scripts/sync-demo.mjs",
     "sync:check": "node --import tsx scripts/sync-demo.mjs --check",
     "smoke": "node scripts/smoke.mjs",
-    "verify": "npm run typecheck && npm run sync:check && npm run build && npm run smoke"
+    "verify": "npm run typecheck && npm run sync:check && npm run build && npm run smoke",
+    "checkpoint": "node scripts/checkpoint.mjs",
+    "discovery": "node scripts/new-discovery-log.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.2",
